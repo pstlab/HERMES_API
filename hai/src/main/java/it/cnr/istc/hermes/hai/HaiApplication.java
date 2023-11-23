@@ -3,6 +3,7 @@ package it.cnr.istc.hermes.hai;
 import java.util.*;
 
 import org.apache.jena.rdf.model.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,19 +22,10 @@ import it.cnr.istc.hermes.hai.model.*;
 @SpringBootApplication
 public class HaiApplication {
 
-	private static final String HERMES_DEFAULT_MODEL_PATH = "/home/alessandro/ws/ai/HERMES/hermes_16_10_test.owl";
+	@Value("${model.path}")
+	private String model;
 
 	private HaiKnowledgeGraph reasoner;
-
-	/**
-	 * 
-	 */
-	protected HaiApplication() {
-		// create the knowledge graph
-		this.reasoner = new HaiKnowledgeGraph();
-		// load a default model
-		this.reasoner.load(HermesDictionary.HERMES_NS.getNs(), HERMES_DEFAULT_MODEL_PATH);
-	}
 
 	/*
 	 * 
@@ -47,6 +39,13 @@ public class HaiApplication {
 	 */
 	@GetMapping("/")
 	public String index() {
+
+		// check reasoner 
+		if (this.reasoner == null) {
+			this.reasoner = new HaiKnowledgeGraph();
+			// load a default model
+			this.reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+		}
 
 		// prepare a result message
 		String msg =  "The Knowledge Model currently loaded is \"%s\" with Name Space \"%m\"";
@@ -63,6 +62,13 @@ public class HaiApplication {
 	 */
 	@GetMapping("/knowledge/topics")
 	public List<Topic> getTopics() {
+
+		// check reasoner 
+		if (this.reasoner == null) {
+			this.reasoner = new HaiKnowledgeGraph();
+			// load a default model
+			this.reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+		}
 
 		List<Topic> list = new ArrayList<>();
 
@@ -86,8 +92,14 @@ public class HaiApplication {
 	 */
 	@PostMapping("/planner/trip")
 	protected PlannedTrip doPlanTrip(@RequestBody TripRequest request) {
-		
 
+		// check reasoner 
+		if (this.reasoner == null) {
+			this.reasoner = new HaiKnowledgeGraph();
+			// load a default model
+			this.reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+		}
+		
 		// create empty object
 		PlannedTrip trip = new PlannedTrip();
 		
