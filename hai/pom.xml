@@ -40,11 +40,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>it.cnr.istc.pst</groupId>
-			<artifactId>platinum</artifactId>
-			<version>[1.4.5,)</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
