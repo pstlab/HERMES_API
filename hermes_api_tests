@@ -5,21 +5,21 @@
 ## Test to query the knowledge base
 
 ```
-curl -X GET http://localhost:8080/knowledge/topics -H 'Content-Type: application/json'
+curl -X GET http://80.211.238.135:8080/knowledge/topics -H 'Content-Type: application/json'
 ```
 
 ```
-curl -X POST http://localhost:8080/knowledge/entities2topic -H 'Content-Type: application/json' -d '{"uri":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Barocco"}'
+curl -X POST http://80.211.238.135:8080/knowledge/entities2topic -H 'Content-Type: application/json' -d '{"uri":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Barocco"}'
 ```
 
 ```
-curl -X POST http://localhost:8080/knowledge/descriptions -H 'Content-Type: application/json' -d '{"uri":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Basilica_di_S._Martino_ai_Monti"}'
+curl -X POST http://80.211.238.135:8080/knowledge/descriptions -H 'Content-Type: application/json' -d '{"uri":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Basilica_di_S._Martino_ai_Monti"}'
 ```
 
 ## Test to query the planner
 
 ```
-curl -X POST http://localhost:8080/planner/trip -H 'Content-Type: application/json' -d '{"userId":"test", "duration":180, "userLocation":[0.8, 1.23, 3.45, 2.11], "groupSize":5, "dVector":[false, false, false], "mVector":[true, false, false], "topics": [{"id":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Barocco", "label":"Barocco"},{"id":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Medioevo", "label":"Medioevo"}]}'
+curl -X POST http://80.211.238.135:8080/planner/trip -H 'Content-Type: application/json' -d '{"userId":"test", "duration":180, "userLocation":[0.8, 1.23, 3.45, 2.11], "groupSize":5, "dVector":[false, false, false], "mVector":[true, false, false], "topics": [{"id":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Barocco", "label":"Barocco"},{"id":"http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Medioevo", "label":"Medioevo"}]}'
 ```
    
    
