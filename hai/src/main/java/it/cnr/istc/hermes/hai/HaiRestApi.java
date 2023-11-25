@@ -40,7 +40,7 @@ public class HaiRestApi {
 	@Autowired
 	private PlannedTripRepository tripRepo;		// mongoDB repo for generated trips
 
-	private static HaiKnowledgeGraph reasoner;
+	private static HaiKnowledgeGraph reasoner; 	// knowledge graph with reasoner
 
 	/*
 	 * 

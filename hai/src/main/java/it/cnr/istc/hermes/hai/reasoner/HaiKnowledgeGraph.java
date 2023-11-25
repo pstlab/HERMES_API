@@ -6,7 +6,6 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.rdf.model.Resource;
 import java.util.*;
 
@@ -44,8 +43,7 @@ public class HaiKnowledgeGraph {
         try {
 
             // create a model from the specified file path
-            //this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM_RDFS_INF);
-            this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF);
+            this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM_RDFS_INF);
             // prepare the model            
             this.model.getDocumentManager().addAltEntry(domainSpace, "file:" + owlFilePath);
             // read ontology file
