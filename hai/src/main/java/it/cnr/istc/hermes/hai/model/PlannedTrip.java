@@ -14,10 +14,10 @@ public class PlannedTrip {
     private static final AtomicLong PLAN_ID = new AtomicLong(0);
     private String id;
     private Date time;
-    private long duration;
+    private int duration;
     private List<Poi> hops;         // orderer list of steps of the visit
     private TripRequest request;    // the request that triggered the planning process for the synthesis of the current trip
-    private double ranking;         // average ranking of 
+    private float ranking;         // average ranking of 
     private long counter;
 
     /**
@@ -48,7 +48,7 @@ public class PlannedTrip {
      * 
      * @return
      */
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
@@ -72,7 +72,7 @@ public class PlannedTrip {
      * 
      * @return
      */
-    public double getRanking() {
+    public float getRanking() {
         return ranking;
     }
 
@@ -96,7 +96,7 @@ public class PlannedTrip {
      * 
      * @param duration
      */
-    public void setDuration(long duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
@@ -120,7 +120,7 @@ public class PlannedTrip {
      * 
      * @param ranking
      */
-    public void setRanking(double ranking) {
+    public void setRanking(float ranking) {
         this.ranking = ranking;
     }
 

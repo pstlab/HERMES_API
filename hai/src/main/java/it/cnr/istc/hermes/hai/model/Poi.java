@@ -20,7 +20,7 @@ public class Poi {
     private List<Description> descriptions;                                 // the thematic context characterizing the description of the cultural entity      
     private CulturalEntity tangible;                                        // the physical entity associated with the contextual POI
     private List<CulturalEntity> intangibles;                               // the intangible entities associated with the physical one
-    private double ranking;                                                 // average ranking by users
+    private float ranking;                                                 // average ranking by users
     private int counter;                                                    // frequency of use
 
     /**
@@ -82,11 +82,11 @@ public class Poi {
         return intangibles;
     }
 
-    public double getRanking() {
+    public float getRanking() {
         return ranking;
     }
 
-    public void setRanking(double ranking) {
+    public void setRanking(float ranking) {
         this.ranking = ranking;
     }
 

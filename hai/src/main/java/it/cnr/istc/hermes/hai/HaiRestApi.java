@@ -250,7 +250,7 @@ public class HaiRestApi {
 			trip.setCounter(0);
 			trip.setDuration(1000);
 			trip.setHops(new ArrayList<>(pois));
-			trip.setRanking(0.0);
+			trip.setRanking(0);
 			trip.setRequest(request);
 			// save planned trip
 			this.tripRepo.save(trip);
