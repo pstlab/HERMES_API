@@ -1,5 +1,6 @@
 package it.cnr.istc.hermes.hai.reasoner;
 
+import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
@@ -44,6 +45,7 @@ public class HaiKnowledgeGraph {
 
             // create a model from the specified file path
             this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM_RDFS_INF);
+
             // prepare the model            
             this.model.getDocumentManager().addAltEntry(domainSpace, "file:" + owlFilePath);
             // read ontology file
@@ -96,6 +98,112 @@ public class HaiKnowledgeGraph {
 
         // get found resources
         return list;
+    }
+
+    /**
+     * Retrieve the full taxonomy of topics from the knowledge
+     * 
+     * @return
+     */
+    public Map<Resource, Set<Resource>> taxonomyOfTopic() {
+        // create map
+        Map<Resource, Set<Resource>> taxonomy = new HashMap<>();
+
+        // root node ARCO:CulturalScope
+        Resource root = this.model.getResource(
+            HermesDictionary.ARCO_CONTEXT_NS.getNs() + "CulturalScope");
+        // build the taxonomy data strcuture
+        this.doVisitTaxonomy(root, taxonomy, new HashSet<>());
+
+        // retrun taxonomy
+        return taxonomy;
+    }
+
+    /**
+     * Retrieve only the leaves of the taxonomy of topics
+     * @return
+     */
+    public Set<Resource> taxonomyOfTopicLeaves() {
+        // set of leaves
+        Set<Resource> leaves = new HashSet<>();
+        Map<Resource, Set<Resource>> taxonomy = this.taxonomyOfTopic();
+        // check the taxonomy
+        for (Resource topic : taxonomy.keySet()) {
+            if (taxonomy.get(topic).isEmpty()) {
+                leaves.add(topic);
+            }
+        }
+
+        // get the leaves
+        return leaves;
+    }
+    
+    /**
+     * 
+     * @param sub
+     * @param pre
+     * @param obj
+     * @return
+     */
+    protected Set<Statement> triples(Resource sub, Property pre, Resource obj) {
+        // set of resulting statements
+        Set<Statement> set = new HashSet<>();
+
+        // check statements
+        Iterator<Statement> it = this.model.listStatements(sub, pre, obj);
+        while (it.hasNext()) {
+            set.add(it.next());
+        }
+
+        // get the set
+        return set;
+    }
+
+    /**
+     * Recursive auxiliary method to visit the taxonomy.
+     * 
+     * Assumptions: the root of the (sub)taxonomy is already into the data structure.
+     * 
+     * @param root
+     * @param taxonomy
+     */
+    private void doVisitTaxonomy(Resource root, Map<Resource, Set<Resource>> taxonomy, Set<Resource> visited) {
+        
+        // prepare the list of children of the (current) root
+        Set<Resource> children = new HashSet<>();
+        // list subclasses of the (current) root
+        Set<Statement> triples = this.triples(
+            null, 
+            this.model.getProperty(
+				HermesDictionary.RDFS_NS.getNs() + "subClassOf"),
+            root);
+
+        // iterate over subclasses
+        for (Statement triple : triples) {
+
+            // get next root
+            Resource nextRoot = triple.getSubject();
+            // check visited
+            if (!visited.contains(nextRoot)) {
+
+                // add to visited
+                visited.add(nextRoot);
+                // add children
+                children.add(nextRoot);
+                // recursive call to the method
+                this.doVisitTaxonomy(nextRoot, taxonomy, visited);
+            }
+        }
+
+        // check individuals 
+        Iterator<Individual> it = this.model.listIndividuals(root);
+        while (it.hasNext()) {
+            // add individual to children
+            children.add(it.next().asResource());
+        }
+
+        // update the taxonomy
+        taxonomy.put(root, children);
     }
 
     /**
@@ -319,28 +427,5 @@ public class HaiKnowledgeGraph {
 
         // get the list
         return new ArrayList<>(set);
-    }
-    
-    /**
-     * List all the statements of the loaded Knowledge Graph
-     * @return
-     */
-    public List<Statement> triples() {
-        // empty list of statements
-        List<Statement> list = new ArrayList<>();
-
-        // check the model
-        if (this.model != null) {
-
-            // retrieve list that match the desired pattern
-            Iterator<Statement> sts = this.model.listStatements();
-            while (sts.hasNext()) {
-                // add the statement
-                list.add(sts.next());
-            }
-        }
-
-        // get found statements
-        return list;
     }
 }

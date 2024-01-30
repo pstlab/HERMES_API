@@ -3,11 +3,13 @@ package it.cnr.istc.hermes.hai;
 import java.util.*;
 
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +42,7 @@ public class HaiRestApi {
 	@Autowired
 	private PlannedTripRepository tripRepo;		// mongoDB repo for generated trips
 
-	private static HaiKnowledgeGraph reasoner; 	// knowledge graph with reasoner
+	private static HaiKnowledgeGraph kg; 		// knowledge graph with embedded reasoner
 
 	/*
 	 * 
@@ -50,37 +52,84 @@ public class HaiRestApi {
 	}
 
 	/**
-	 * Retrieve the list of knowledge constants representing possible topics of a trip. 
+	 * Retrieve the taxonomy of knowledge constants representing possible topics of a trip. 
 	 * 
 	 * Topics are used to retrieve contextual and thematic knowledge when sythesizing new trips 
 	 * 
 	 * @return
 	 */
 	@GetMapping("/knowledge/topics")
-	public List<Topic> getTopics() {
+	public Map<Topic, Topic> getTopics() {
 
-		// list of topics
-		List<Topic> list = new ArrayList<>();
+		// taxonomy of topic objects
+		Map<Topic, Topic> result = new HashMap<>();
 
 		// check reasoner 
-		if (reasoner == null) {
-			reasoner = new HaiKnowledgeGraph();
+		if (kg == null) {
+			kg = new HaiKnowledgeGraph();
 			// load a default model
-			reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
-		
+		// retrieve the taxonomy 
+		Map<Resource, Set<Resource>> taxonomy = kg.taxonomyOfTopic();
+		for (Resource topic : taxonomy.keySet()) {
+			// create topic object
+			Topic parent = new Topic(
+				topic.getURI(),
+				topic.getLocalName()
+			);
 
-		// retrieve all the individuals of hermes:Topic
-		List<Resource> res = reasoner.listResourcesOfType(HermesDictionary.W3ID_NS.getNs() + "Topic");
-		for (Resource r : res) {
-			// create a topic object
-			Topic topic = new Topic(r.getURI(), r.getLocalName());
-			list.add(topic);
+			// check sub-topics
+			for (Resource subtopic : taxonomy.get(topic)) {
+				// create sub-topic object
+				Topic child = new Topic(
+					subtopic.getURI(),
+					subtopic.getLocalName()
+				);
+
+				// update the taxonomy
+				result.put(child, parent);
+			}
 		}
 
-		// get the list of topics
-		return list;
+		// get the taxonomy of topics
+		return result;
+	}
+
+	/**
+	 * Retrieve the leaves of the taxonomy of topics
+	 * 
+	 * @return
+	 */
+	@GetMapping("/knowledge/topics/leaves")
+	public List<Topic> getTopicLeaves() {
+
+		// leaves of the taxonomy
+		List<Topic> leaves = new ArrayList<>();
+
+		// check reasoner 
+		if (kg == null) {
+			kg = new HaiKnowledgeGraph();
+			// load a default model
+			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+		}
+
+		// retrieve information from the knowledge graph
+		Set<Resource> resources = kg.taxonomyOfTopicLeaves();
+		for (Resource res : resources) {
+			// create topic object
+			Topic topic = new Topic(
+				res.getURI(),
+				res.getLocalName()
+			);
+
+			// add to leaves
+			leaves.add(topic);
+		}
+
+		// get the leaves
+		return leaves;
 	}
 
 	/**
@@ -93,14 +142,14 @@ public class HaiRestApi {
 		List<CulturalEntity> list = new ArrayList<>();
 		
 		// check reasoner 
-		if (reasoner == null) {
-			reasoner = new HaiKnowledgeGraph();
+		if (kg == null) {
+			kg = new HaiKnowledgeGraph();
 			// load a default model
-			reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
 		// retrieve all the individuals of arco:TangibleCulturalProperty
-		List<Resource> res = reasoner.listResourcesOfType(HermesDictionary.ARCO_NS.getNs() + "CulturalProperty");
+		List<Resource> res = kg.listResourcesOfType(HermesDictionary.ARCO_NS.getNs() + "CulturalProperty");
 		for (Resource r : res) {
 			// create a entity object
 			CulturalEntity entity = new CulturalEntity();
@@ -124,14 +173,14 @@ public class HaiRestApi {
 		// list of entities
 		List<CulturalEntity> list = new ArrayList<>();
 		// check reasoner 
-		if (reasoner == null) {
-			reasoner = new HaiKnowledgeGraph();
+		if (kg == null) {
+			kg = new HaiKnowledgeGraph();
 			// load a default model
-			reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
 		// get the resource associated with the topic
-		Resource res = reasoner.getResourceById(query.getUri());
+		Resource res = kg.getResourceById(query.getUri());
 		if (res != null) {
 			
 			// create topic object model
@@ -140,7 +189,7 @@ public class HaiRestApi {
 			topic.setLabel(res.getLocalName());
 
 			// retrieve the list of entities correlated with the topic
-			list = reasoner.getEntitiesByTopic(topic);
+			list = kg.getEntitiesByTopic(topic);
 		}
 
 		// get the list 
@@ -159,14 +208,14 @@ public class HaiRestApi {
 		List<Description> list = new ArrayList<>();
 		
 		// check reasoner 
-		if (reasoner == null) {
-			reasoner = new HaiKnowledgeGraph();
+		if (kg == null) {
+			kg = new HaiKnowledgeGraph();
 			// load a default model
-			reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
 		// get the resource
-		Resource res  = reasoner.getResourceById(query.getUri());
+		Resource res  = kg.getResourceById(query.getUri());
 		if (res != null) {
 
 			// create cultural entity
@@ -174,7 +223,7 @@ public class HaiRestApi {
 			entity.setId(res.getURI());
 			entity.setLabel(res.getLocalName());
 			// retrieve all the description of the given entity
-			list = reasoner.getEntityDescriptions(entity);
+			list = kg.getEntityDescriptions(entity);
 		}
 
 		// get the list
@@ -191,10 +240,10 @@ public class HaiRestApi {
 	protected PlannedTrip doPlanTrip(@RequestBody TripRequest request) {
 
 		// check reasoner 
-		if (reasoner == null) {
-			reasoner = new HaiKnowledgeGraph();
+		if (kg == null) {
+			kg = new HaiKnowledgeGraph();
 			// load a default model
-			reasoner.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
 		Set<Poi> pois = new HashSet<>();
@@ -205,7 +254,7 @@ public class HaiRestApi {
 		// check tangible cultural properties
 		for (Topic topic : request.getTopics()) {
 
-			tangibles.addAll(reasoner.getTangibleEntitiesByTopic(topic));
+			tangibles.addAll(kg.getTangibleEntitiesByTopic(topic));
 		}
 
 		// prepare POIs for each tangible cultural entity
@@ -214,7 +263,7 @@ public class HaiRestApi {
 			// list of descriptions 
 			List<Description> descs = new ArrayList<>();
 			// retrieve descriptions
-			for (Description desc : reasoner.getEntityDescriptions(tangible)) {
+			for (Description desc : kg.getEntityDescriptions(tangible)) {
 				// check topic 
 				if (request.getTopics().contains(desc.getTopic())) {
 					descs.add(desc);

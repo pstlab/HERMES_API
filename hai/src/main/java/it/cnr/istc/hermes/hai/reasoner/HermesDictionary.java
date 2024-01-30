@@ -13,6 +13,12 @@ public enum HermesDictionary {
 
     ARCO_NS("https://w3id.org/arco/ontology/arco/"),
 
+    ARCO_CATALOGUE_NS("https://w3id.org/arco/ontology/catalogue/"),
+
+    ARCO_CORE_NS("https://w3id.org/arco/ontology/core/"),
+
+    ARCO_CONTEXT_NS("https://w3id.org/arco/ontology/context-description/"),
+
     HERMES_NS("http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#");
 
     private String ns; 

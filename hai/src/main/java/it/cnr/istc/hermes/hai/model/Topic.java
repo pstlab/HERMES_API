@@ -10,10 +10,13 @@ package it.cnr.istc.hermes.hai.model;
 public class Topic {
 
     private String id;                      // the URI from the knowledge base
-    private String label;                   // the label from the knowledge base
+    private String label;                   // the label of the topic
 
     /**
+     * Create a topic object 
      * 
+     * @param id
+     * @param label
      */
     public Topic(String id, String label) {
         this.id = id;
