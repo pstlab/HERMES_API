@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,10 +58,10 @@ public class HaiRestApi {
 	 * @return
 	 */
 	@GetMapping("/knowledge/topics")
-	public Map<Topic, Topic> getTopics() {
+	public Map<Topic, List<Topic>> getTopics() {
 
 		// taxonomy of topic objects
-		Map<Topic, Topic> result = new HashMap<>();
+		Map<Topic, List<Topic>> result = new HashMap<>();
 
 		// check reasoner 
 		if (kg == null) {
@@ -74,62 +73,43 @@ public class HaiRestApi {
 		// retrieve the taxonomy 
 		Map<Resource, Set<Resource>> taxonomy = kg.taxonomyOfTopic();
 		for (Resource topic : taxonomy.keySet()) {
+
+			// get literal
+			Statement pLabel = topic.getProperty(kg.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label"));
+			String parentLabel = pLabel.getObject().asLiteral().getString();
+
 			// create topic object
 			Topic parent = new Topic(
 				topic.getURI(),
-				topic.getLocalName()
+				parentLabel
 			);
 
-			// check sub-topics
+			
+
+			// create children
+			List<Topic> children = new ArrayList<>();
 			for (Resource subtopic : taxonomy.get(topic)) {
-				// create sub-topic object
+
+				// get literal
+				Statement cLabel = subtopic.getProperty(kg.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label"));
+				String childLabel = cLabel.getObject().asLiteral().getString();
+
+				// create sub-topic
 				Topic child = new Topic(
 					subtopic.getURI(),
-					subtopic.getLocalName()
+					childLabel
 				);
 
-				// update the taxonomy
-				result.put(child, parent);
+				// add child
+				children.add(child);
 			}
+
+			// add entry to the result
+			result.put(parent, children);
 		}
 
 		// get the taxonomy of topics
 		return result;
-	}
-
-	/**
-	 * Retrieve the leaves of the taxonomy of topics
-	 * 
-	 * @return
-	 */
-	@GetMapping("/knowledge/topics/leaves")
-	public List<Topic> getTopicLeaves() {
-
-		// leaves of the taxonomy
-		List<Topic> leaves = new ArrayList<>();
-
-		// check reasoner 
-		if (kg == null) {
-			kg = new HaiKnowledgeGraph();
-			// load a default model
-			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
-		}
-
-		// retrieve information from the knowledge graph
-		Set<Resource> resources = kg.taxonomyOfTopicLeaves();
-		for (Resource res : resources) {
-			// create topic object
-			Topic topic = new Topic(
-				res.getURI(),
-				res.getLocalName()
-			);
-
-			// add to leaves
-			leaves.add(topic);
-		}
-
-		// get the leaves
-		return leaves;
 	}
 
 	/**

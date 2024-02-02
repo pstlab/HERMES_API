@@ -106,9 +106,9 @@ public class HaiKnowledgeGraph {
      * @return
      */
     public Map<Resource, Set<Resource>> taxonomyOfTopic() {
+
         // create map
         Map<Resource, Set<Resource>> taxonomy = new HashMap<>();
-
         // root node ARCO:CulturalScope
         Resource root = this.model.getResource(
             HermesDictionary.ARCO_CONTEXT_NS.getNs() + "CulturalScope");
@@ -189,21 +189,32 @@ public class HaiKnowledgeGraph {
                 // add to visited
                 visited.add(nextRoot);
                 // add children
-                children.add(nextRoot);
+                //children.add(nextRoot);
+
+                // get individual
+                Iterator<Individual> it = this.model.listIndividuals(nextRoot);
+                while (it.hasNext()) {
+
+                    // get individual
+                    Individual i = it.next();
+                    // add individual to children
+                    children.add(i.asResource());
+                }
+
                 // recursive call to the method
                 this.doVisitTaxonomy(nextRoot, taxonomy, visited);
             }
         }
 
-        // check individuals 
+        // get individual
         Iterator<Individual> it = this.model.listIndividuals(root);
-        while (it.hasNext()) {
-            // add individual to children
-            children.add(it.next().asResource());
+        if (it.hasNext()) {
+            
+            // get individual
+            Individual i = it.next();
+            // update the taxonomy
+            taxonomy.put(i.asResource(), children);
         }
-
-        // update the taxonomy
-        taxonomy.put(root, children);
     }
 
     /**
