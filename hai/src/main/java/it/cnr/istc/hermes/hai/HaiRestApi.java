@@ -2,23 +2,32 @@ package it.cnr.istc.hermes.hai;
 
 import java.util.*;
 
+import javax.validation.Valid;
+
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-import it.cnr.istc.hermes.hai.reasoner.HaiKnowledgeGraph;
-import it.cnr.istc.hermes.hai.reasoner.HermesDictionary;
+import jakarta.servlet.http.HttpServletRequest;
 import it.cnr.istc.hermes.hai.db.mongo.PlannedTripRepository;
 import it.cnr.istc.hermes.hai.db.mongo.PoiRepository;
 import it.cnr.istc.hermes.hai.db.mongo.TripRequestRepository;
+import it.cnr.istc.hermes.hai.knowledge.HaiKnowledgeGraph;
+import it.cnr.istc.hermes.hai.knowledge.HermesDictionary;
+import it.cnr.istc.hermes.hai.knowledge.KnowledgeQuery;
 import it.cnr.istc.hermes.hai.model.*;
 
 /**
@@ -27,27 +36,46 @@ import it.cnr.istc.hermes.hai.model.*;
 @RestController
 @SpringBootApplication
 @EnableMongoRepositories
-public class HaiRestApi {
+public class HaiRestApi implements ErrorController {
 
 	@Value("${knowledge.model.path}")
 	private String model;
 
 	@Autowired
-	private TripRequestRepository reqRepo;		// mongoDB repo for received requests
+	private TripRequestRepository reqRepo;			// mongoDB repo for received requests
 
 	@Autowired
-	private PoiRepository poiRepo;				// mongoDB repo for generated POIs
+	private PoiRepository poiRepo;					// mongoDB repo for generated POIs
 
 	@Autowired
-	private PlannedTripRepository tripRepo;		// mongoDB repo for generated trips
+	private PlannedTripRepository tripRepo;			// mongoDB repo for generated trips
 
-	private static HaiKnowledgeGraph kg; 		// knowledge graph with embedded reasoner
+	private static HaiKnowledgeGraph knowledge; 	// knowledge graph with embedded reasoner
 
 	/*
 	 * 
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(HaiRestApi.class, args);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@GetMapping("/")
+	public String home() {
+		return "Hi, this si the HERMES AI Server API endpoint!.";
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/error")
+	public String error() {
+		// return general message
+        return "OPS! Invalid or missing request parameters!";
 	}
 
 	/**
@@ -64,19 +92,22 @@ public class HaiRestApi {
 		Map<Topic, List<Topic>> result = new HashMap<>();
 
 		// check reasoner 
-		if (kg == null) {
-			kg = new HaiKnowledgeGraph();
+		if (knowledge == null) {
+			knowledge = new HaiKnowledgeGraph();
 			// load a default model
-			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
+		// get rdfs:label data property
+		Property label = knowledge.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label");
+
 		// retrieve the taxonomy 
-		Map<Resource, Set<Resource>> taxonomy = kg.taxonomyOfTopic();
+		Map<Resource, Set<Resource>> taxonomy = knowledge.taxonomyOfTopic();
 		for (Resource topic : taxonomy.keySet()) {
 
 			// get literal
-			Statement pLabel = topic.getProperty(kg.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label"));
-			String parentLabel = pLabel.getObject().asLiteral().getString();
+			Statement pLabel = topic.getProperty(label);
+			String parentLabel = pLabel == null ? topic.getLocalName() : pLabel.getString();
 
 			// create topic object
 			Topic parent = new Topic(
@@ -84,15 +115,13 @@ public class HaiRestApi {
 				parentLabel
 			);
 
-			
-
 			// create children
 			List<Topic> children = new ArrayList<>();
 			for (Resource subtopic : taxonomy.get(topic)) {
 
 				// get literal
-				Statement cLabel = subtopic.getProperty(kg.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label"));
-				String childLabel = cLabel.getObject().asLiteral().getString();
+				Statement cLabel = subtopic.getProperty(label);
+				String childLabel = cLabel == null ? subtopic.getLocalName() : cLabel.getString();
 
 				// create sub-topic
 				Topic child = new Topic(
@@ -118,23 +147,28 @@ public class HaiRestApi {
 	 */
 	@GetMapping("/knowledge/entities")
 	public List<CulturalEntity> getCulturalEntities() {
+
 		// list of entities
 		List<CulturalEntity> list = new ArrayList<>();
-		
+	
 		// check reasoner 
-		if (kg == null) {
-			kg = new HaiKnowledgeGraph();
+		if (knowledge == null) {
+			knowledge = new HaiKnowledgeGraph();
 			// load a default model
-			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
+		// get rdfs:label data property
+		Property label = knowledge.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label");
+
 		// retrieve all the individuals of arco:TangibleCulturalProperty
-		List<Resource> res = kg.listResourcesOfType(HermesDictionary.ARCO_NS.getNs() + "CulturalProperty");
+		List<Resource> res = knowledge.listResourcesOfType(HermesDictionary.ARCO_NS.getNs() + "CulturalProperty");
 		for (Resource r : res) {
 			// create a entity object
 			CulturalEntity entity = new CulturalEntity();
 			entity.setId(r.getURI());
-			entity.setLabel(r.getLocalName());
+			Statement rLabel = r.getProperty(label);
+			entity.setLabel(rLabel == null ? r.getLocalName() : rLabel.getString());
 			list.add(entity);
 		}
 
@@ -143,24 +177,24 @@ public class HaiRestApi {
 	}
 
 	/**
-	 * Retrieve the list of entities associated with a given topic.
+	 * Retrieve the list of tangible and intangible entities that are associated with a given topic.
 	 * 
-	 * @param uri - the URI uniquely identifying the topic within the knowledge base
+	 * @param query
 	 * @return
 	 */
-	@PostMapping("/knowledge/entities2topic")
-	public List<CulturalEntity> getEntitiesRelatedToTopic(@RequestBody PostKnowledgeQuery query) { 
+	@GetMapping("/knowledge/entities2topic")
+	public List<CulturalEntity> getEntitiesRelatedToTopic(@Valid @RequestBody KnowledgeQuery query) { 
 		// list of entities
 		List<CulturalEntity> list = new ArrayList<>();
 		// check reasoner 
-		if (kg == null) {
-			kg = new HaiKnowledgeGraph();
+		if (knowledge == null) {
+			knowledge = new HaiKnowledgeGraph();
 			// load a default model
-			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
 		// get the resource associated with the topic
-		Resource res = kg.getResourceById(query.getUri());
+		Resource res = knowledge.getResourceById(query.getUri());
 		if (res != null) {
 			
 			// create topic object model
@@ -169,7 +203,7 @@ public class HaiRestApi {
 			topic.setLabel(res.getLocalName());
 
 			// retrieve the list of entities correlated with the topic
-			list = kg.getEntitiesByTopic(topic);
+			list = knowledge.getEntitiesByTopic(topic);
 		}
 
 		// get the list 
@@ -183,27 +217,32 @@ public class HaiRestApi {
 	 * @return
 	 */
 	@PostMapping("/knowledge/descriptions")
-	public List<Description> getEntityDescriptions(@RequestBody PostKnowledgeQuery query) {
+	public List<Description> getEntityDescriptions(@Valid @RequestBody KnowledgeQuery query) {
 		// list of entities
 		List<Description> list = new ArrayList<>();
 		
 		// check reasoner 
-		if (kg == null) {
-			kg = new HaiKnowledgeGraph();
+		if (knowledge == null) {
+			knowledge = new HaiKnowledgeGraph();
 			// load a default model
-			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
+		// get rdfs:label data property
+		Property label = knowledge.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label");
+
 		// get the resource
-		Resource res  = kg.getResourceById(query.getUri());
+		Resource res  = knowledge.getResourceById(query.getUri());
 		if (res != null) {
 
 			// create cultural entity
 			CulturalEntity entity = new CulturalEntity();
 			entity.setId(res.getURI());
-			entity.setLabel(res.getLocalName());
+			Statement sLab = res.getProperty(label);
+			// set resource label
+			entity.setLabel(sLab == null ? res.getLocalName() : sLab.getString());
 			// retrieve all the description of the given entity
-			list = kg.getEntityDescriptions(entity);
+			list = knowledge.getEntityDescriptions(entity);
 		}
 
 		// get the list
@@ -217,13 +256,13 @@ public class HaiRestApi {
 	 * @return
 	 */
 	@PostMapping("/planner/trip")
-	protected PlannedTrip doPlanTrip(@RequestBody TripRequest request) {
+	protected PlannedTrip doPlanTrip(@Valid @RequestBody TripRequest request) {
 
 		// check reasoner 
-		if (kg == null) {
-			kg = new HaiKnowledgeGraph();
+		if (knowledge == null) {
+			knowledge = new HaiKnowledgeGraph();
 			// load a default model
-			kg.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
 		Set<Poi> pois = new HashSet<>();
@@ -234,7 +273,7 @@ public class HaiRestApi {
 		// check tangible cultural properties
 		for (Topic topic : request.getTopics()) {
 
-			tangibles.addAll(kg.getTangibleEntitiesByTopic(topic));
+			tangibles.addAll(knowledge.getTangibleEntitiesByTopic(topic));
 		}
 
 		// prepare POIs for each tangible cultural entity
@@ -243,7 +282,7 @@ public class HaiRestApi {
 			// list of descriptions 
 			List<Description> descs = new ArrayList<>();
 			// retrieve descriptions
-			for (Description desc : kg.getEntityDescriptions(tangible)) {
+			for (Description desc : knowledge.getEntityDescriptions(tangible)) {
 				// check topic 
 				if (request.getTopics().contains(desc.getTopic())) {
 					descs.add(desc);
@@ -306,7 +345,7 @@ public class HaiRestApi {
 	 * 
 	 * @return
 	 */
-	@GetMapping("service/pois")
+	@GetMapping("/service/pois")
 	protected List<Poi> getPois() {
 
 		// retrieve the list of generated POIs

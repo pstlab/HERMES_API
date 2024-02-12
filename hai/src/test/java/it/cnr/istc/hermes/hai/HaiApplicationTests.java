@@ -1,20 +1,14 @@
 package it.cnr.istc.hermes.hai;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-
-import org.apache.jena.rdf.model.Resource;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import it.cnr.istc.hermes.hai.exception.ReasonerSetupException;
-import it.cnr.istc.hermes.hai.reasoner.HaiKnowledgeGraph;
-import it.cnr.istc.hermes.hai.reasoner.HermesDictionary;
+import it.cnr.istc.hermes.hai.knowledge.HaiKnowledgeGraph;
+import it.cnr.istc.hermes.hai.knowledge.HermesDictionary;
 
 import java.util.*;
 import org.apache.jena.rdf.model.*;

@@ -1,4 +1,4 @@
-package it.cnr.istc.hermes.hai.reasoner;
+package it.cnr.istc.hermes.hai.knowledge;
 
 /**
  * 
