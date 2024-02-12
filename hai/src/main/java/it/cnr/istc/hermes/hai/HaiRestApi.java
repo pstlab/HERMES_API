@@ -268,23 +268,16 @@ public class HaiRestApi implements ErrorController {
 		Set<Poi> pois = new HashSet<>();
 		// save the received request
 		this.reqRepo.save(request);	
-
-		System.out.println(">>> Request: " + request + "\n");
 		// set of relevant tangible entities
 		Set<CulturalEntity> tangibles = new HashSet<>();
 		// check tangible cultural properties
 		for (Topic topic : request.getTopics()) {
-
-			System.out.println("||| input topic " + topic);
 			// retrieve tangibles
 			tangibles.addAll(knowledge.getTangibleEntitiesByTopic(topic));
 		}
 
 		// prepare POIs for each tangible cultural entity
 		for (CulturalEntity tangible : tangibles) {
-
-			// print tangible
-			System.out.println(">>>\t" + tangible);
 
 			// list of descriptions - TODO : filter descriptions by relevant topics 
 			List<Description> descs = knowledge.getEntityDescriptions(tangible);
