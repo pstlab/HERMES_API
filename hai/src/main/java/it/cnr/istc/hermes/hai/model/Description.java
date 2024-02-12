@@ -1,5 +1,8 @@
 package it.cnr.istc.hermes.hai.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Object model representing a thematic description of a cultural entity
  */
@@ -7,8 +10,15 @@ public class Description {
     
     private String id;                  
     private String text;
-    private Topic topic;
+    private List<Topic> topics;
     private CulturalEntity entity;
+
+    /**
+     * 
+     */
+    public Description() {
+        this.topics = new ArrayList<>();
+    }
 
     /**
      * 
@@ -30,8 +40,16 @@ public class Description {
      * 
      * @return
      */
-    public Topic getTopic() {
-        return topic;
+    public void addTopic(Topic topic) {
+        this.topics.add(topic);
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public List<Topic> getTopics() {
+        return new ArrayList<>(this.topics);
     }
 
     /**
@@ -56,14 +74,6 @@ public class Description {
      */
     public void setText(String text) {
         this.text = text;
-    }
-
-    /**
-     * 
-     * @param topic
-     */
-    public void setTopic(Topic topic) {
-        this.topic = topic;
     }
 
     /**
@@ -95,6 +105,6 @@ public class Description {
      */
     @Override
     public String toString() {
-        return "[Description] {\"id\": \"" + this.id + "\", \"topic\": \"" + this.topic.getId() + "\" \"text\": \"" + this.text +"\"}";
+        return "[Description] {\"id\": \"" + this.id + "\", \"topics\": \"" + this.topics + "\" \"text\": \"" + this.text +"\"}";
     }
 }

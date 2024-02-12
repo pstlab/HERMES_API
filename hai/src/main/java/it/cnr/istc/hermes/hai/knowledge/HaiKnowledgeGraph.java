@@ -253,6 +253,8 @@ public class HaiKnowledgeGraph {
         Property hasTopic = this.model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasTopic");
         // get property rdfs:comment
         Property hasComment = this.model.getProperty(HermesDictionary.RDFS_NS.getNs() + "comment");
+        // get rdfs:label data property
+        Property label = this.model.getProperty(HermesDictionary.HERMES_NS.getNs() + "label");
 
         // retrieve resource associated with the entity
         Resource res = this.getResourceById(entity.getId());
@@ -269,28 +271,36 @@ public class HaiKnowledgeGraph {
                 
                 // get comment
                 Literal text = obj.getProperty(hasComment).getObject().asLiteral();
-                // get topic
-                Resource tc = obj.getProperty(hasTopic).getObject().asResource();
-
-                // create topic
-                Topic topic = new Topic();
-                topic.setId(tc.getURI());
-                topic.setLabel(tc.getLocalName());
 
                 // create description object model
                 Description desc = new Description();
                 desc.setId(obj.getURI());
                 desc.setText(text.getString());
-                desc.setTopic(topic);
 
+
+                // get topic
+                Iterator<Statement> dts = obj.listProperties(hasTopic);
+                while (dts.hasNext()) {
+
+                    // get associated topic resource
+                    Resource dt = dts.next().getObject().asResource();
+
+                     // create topic
+                    Topic topic = new Topic();
+                    topic.setId(dt.getURI());
+                    Statement dtl = dt.getProperty(label);
+                    topic.setLabel(dtl == null ? dt.getLocalName() : dtl.getString());
+
+                    // add topic to description
+                    desc.addTopic(topic);
+                }
+                
                 // set cultural entity
                 desc.setEntity(entity);
-
                 // add description to the list
                 list.add(desc);
             }
         }
-
 
         // get the list
         return list;

@@ -17,9 +17,9 @@ public class Poi {
     private static final AtomicLong POI_ID = new AtomicLong(0);
     private String id;
     private Date time;
-    private List<Description> descriptions;                                 // the thematic context characterizing the description of the cultural entity      
+    private Set<Description> descriptions;                                 // the thematic context characterizing the description of the cultural entity      
     private CulturalEntity tangible;                                        // the physical entity associated with the contextual POI
-    private List<CulturalEntity> intangibles;                               // the intangible entities associated with the physical one
+    private Set<CulturalEntity> intangibles;                               // the intangible entities associated with the physical one
     private float ranking;                                                 // average ranking by users
     private int counter;                                                    // frequency of use
 
@@ -29,8 +29,8 @@ public class Poi {
     public Poi() {
         this.id = "POI_" + POI_ID.getAndIncrement();
         this.time = new Date();
-        this.descriptions = new ArrayList<>();
-        this.intangibles = new ArrayList<>();
+        this.descriptions = new HashSet<>();
+        this.intangibles = new HashSet<>();
     }
     
 
@@ -67,18 +67,18 @@ public class Poi {
     }
 
     public void setDescriptions(List<Description> descriptions) {
-        this.descriptions = descriptions;
+        this.descriptions = new HashSet<>(descriptions);
     }
 
-    public List<Description> getDescriptions() {
+    public Set<Description> getDescriptions() {
         return descriptions;
     }
 
     public void setIntangibles(List<CulturalEntity> intangibles) {
-        this.intangibles = intangibles;
+        this.intangibles = new HashSet<>(intangibles);
     }
 
-    public List<CulturalEntity> getIntangibles() {
+    public Set<CulturalEntity> getIntangibles() {
         return intangibles;
     }
 
