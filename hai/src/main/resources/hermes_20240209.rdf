@@ -2022,17 +2022,6 @@ Fonte: https://www.treccani.it/enciclopedia/arianesimo_%28Dizionario-di-Storia%2
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Dance"/>
         <rdfs:label>Danza</rdfs:label>
     </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Diaconia -->
-
-    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Diaconia">
-        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Rituals"/>
-        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#DiaconiaDescription"/>
-        <rdfs:label>Diaconia</rdfs:label>
-    </owl:NamedIndividual>
-    
 
 
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#DiaconiaDescription -->
@@ -2055,6 +2044,14 @@ Il servizio ai fratelli costituisce un elemento essenziale della cura che Gesù 
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Diaconia_const">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ContemporaryRitual"/>
+        <rdfs:label>Diaconia</rdfs:label>
+    </owl:NamedIndividual>
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Diaconia -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Diaconia">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Rituals"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#DiaconiaDescription"/>
         <rdfs:label>Diaconia</rdfs:label>
     </owl:NamedIndividual>
     
@@ -3410,10 +3407,11 @@ https://www.vaticannews.va/it/chiesa/news/2021-03/la-basilica-di-santa-prassede-
     
 
 
-    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Sculpture -->
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Sculpture_const -->
 
-    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Sculpture">
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Sculpture_const">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Sculpture"/>
+        <rdfs:label>Scultura</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -3603,6 +3601,7 @@ Fonte: https://www.treccani.it/enciclopedia/publio-virgilio-marone_(Enciclopedia
     <rdf:Description rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Sculpture">
         <rdfs:label>Scultura</rdfs:label>
     </rdf:Description>
+    
 </rdf:RDF>
 
 

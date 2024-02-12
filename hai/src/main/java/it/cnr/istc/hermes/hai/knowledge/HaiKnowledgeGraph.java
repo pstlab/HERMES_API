@@ -189,9 +189,6 @@ public class HaiKnowledgeGraph {
 
                 // add to visited
                 visited.add(nextRoot);
-                // add children
-                //children.add(nextRoot);
-
                 // get individual
                 Iterator<Individual> it = this.model.listIndividuals(nextRoot);
                 while (it.hasNext()) {

@@ -73,7 +73,6 @@
 					<image>
 						<builder>paketobuildpacks/builder-jammy-base:latest</builder>
 					</image>
-					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>
