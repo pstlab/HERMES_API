@@ -289,7 +289,7 @@ public class HaiKnowledgeGraph {
                     Topic topic = new Topic();
                     topic.setId(dt.getURI());
                     Statement dtl = dt.getProperty(label);
-                    topic.setLabel(dtl == null ? dt.getLocalName() : dtl.getString());
+                    topic.setLabel(dtl == null ? dt.getLocalName() : dtl.getLiteral().getString());
 
                     // add topic to description
                     desc.addTopic(topic);
@@ -364,7 +364,8 @@ public class HaiKnowledgeGraph {
     }
 
     /**
-     * Retrieve all the tangible entities that have at least one description related to the specified topic
+     * Retrieve all the tangible entities that are associated with the given topic through their descriptions
+     * 
      * @param topic
      * @return
      */
@@ -427,54 +428,65 @@ public class HaiKnowledgeGraph {
     }
 
     /**
-     * 
+     * Retrieve all the intangible entities that are associated with the given topic thorough their descriptions
      * @param topic
      * @return
      */
     public List<CulturalEntity> getIntangibleEntitiesByTopic(Topic topic) {
+
         // list of retrieved descriptions
         Set<CulturalEntity> set = new HashSet<>();
 
         // get property w3id:hasDescription
-        Property hasDesc = this.model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasDescription");
+        Property hasDesc = model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasDescription");
         // get property w3id:hasTopic
-        Property hasTopic = this.model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasTopic");
-        // get property rdf:type
-        Property type = this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type");
+        Property hasTopic = model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasTopic");
+        // get rdf:type property
+        Property type = model.getProperty(HermesDictionary.RDF_NS.getNs() + "type");
+        // get rdfs:label data property
+        Property label = model.getProperty(HermesDictionary.RDFS_NS.getNs() + "label");
+        // get arco:TangibleCulturalProperty type
+        Resource tangibleClass = model.getResource(HermesDictionary.ARCO_NS.getNs() + "IntangibleCulturalProperty");
 
         // retrieve resource associated with the topic
-        Resource res = this.getResourceById(topic.getId());
-        // retrieves all the descriptions associated with the topic
-        Iterator<Statement> it = this.model.listStatements(null, hasTopic, res);
+        Resource res = model.getResource(topic.getId());
+        // get the type of the given topic
+        Resource topicType = res.getProperty(type).getObject().asResource();
+        // list all topics of the retrieved type
+        Iterator<Statement> it = model.listStatements(null, type, topicType);
         while (it.hasNext()) {
 
-            // get statement
-            Statement s = it.next();
-            // retrieve cultural entity associated with the description
-            Iterator<Statement> iit = this.model.listStatements(null, hasDesc, s.getSubject());
-            while (iit.hasNext()) {
-                
-                // get statement
-                Statement ss = iit.next();
-                // check if tangible
-                Iterator<Statement> ip = this.model.listStatements(
-                    ss.getSubject(), 
-                    type, 
-                    this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "IntangibleCulturalProperty"));
+            // get a correlated topic
+            Resource t = it.next().getSubject();
+            // list descriptions taggeted with the cuyrrent topic
+            Iterator<Statement> descStatements = model.listStatements(null, hasTopic, t);
+            while (descStatements.hasNext()) {
 
-                // check if statement exists
-                if (ip.hasNext()) {
+                // get tagged description
+                Resource desc = descStatements.next().getSubject();
+                // get associated cultural entity
+                Iterator<Statement> entityStatements = model.listStatements(null, hasDesc, desc);
+                while (entityStatements.hasNext()) {
 
-                    CulturalEntity entity = new CulturalEntity();
-                    entity.setId(ss.getSubject().getURI());
-                    entity.setLabel(ss.getSubject().getLocalName());
-                    // add entity to the set
-                    set.add(entity);
+                    // get current entity 
+                    Resource entity = entityStatements.next().getSubject();
+                    // check if the entity is a tangible cultural property 
+                    if (model.contains(entity, type, tangibleClass)) {
+
+                       // create cultural entity
+                       CulturalEntity e = new CulturalEntity();
+                       // set attributes
+                       e.setId(entity.getURI());
+                       Statement lStat = entity.getProperty(label);
+                       e.setLabel(lStat == null ? entity.getLocalName() : lStat.getString());
+                       // add entity to the result set
+                       set.add(e);
+                   }
                 }
             }
         }
 
         // get the list
         return new ArrayList<>(set);
-    }
+   }
 }

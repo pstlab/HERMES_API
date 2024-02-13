@@ -281,16 +281,25 @@ public class HaiRestApi implements ErrorController {
 
 			// list of descriptions - TODO : filter descriptions by relevant topics 
 			List<Description> descs = knowledge.getEntityDescriptions(tangible);
-
-			// TODO - retrieve associated intangible entities
-
 			// check data
 			if (!descs.isEmpty()) {
 
-				// create POI
+				// prepare the list of associated intangibles
+				List<CulturalEntity> intangibles = new ArrayList<>();
+				// retrieve descriptions' topics
+				for (Description desc : descs) {
+					// check description's topics
+					for (Topic dTopic : desc.getTopics()) {
+						// retrieve intangibles
+						intangibles.addAll(knowledge.getIntangibleEntitiesByTopic(dTopic));
+					}
+				}
+
+				// create contextual POI
 				Poi poi = new Poi();
 				poi.setTangible(tangible);
 				poi.setDescriptions(descs);
+				poi.setIntangibles(intangibles);
 
 				// store the poi into the repository
 				this.poiRepo.save(poi);
