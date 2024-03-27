@@ -143,6 +143,7 @@ public class HaiRestApi implements ErrorController {
 
 	/**
 	 * Retrieve all the individuals of CulturalProperty, either tangible or intangible.
+	 * 
 	 * @return
 	 */
 	@GetMapping("/knowledge/entities")
@@ -216,7 +217,7 @@ public class HaiRestApi implements ErrorController {
 	 * @param uri - the URI uniquely identifying the cultural entity within the knowledge base
 	 * @return
 	 */
-	@PostMapping("/knowledge/descriptions")
+	@GetMapping("/knowledge/descriptions")
 	public List<Description> getEntityDescriptions(@Valid @RequestBody KnowledgeQuery query) {
 		// list of entities
 		List<Description> list = new ArrayList<>();
@@ -278,6 +279,8 @@ public class HaiRestApi implements ErrorController {
 
 		// prepare POIs for each tangible cultural entity
 		for (CulturalEntity tangible : tangibles) {
+
+			System.out.println(">> Found tangible for POI: " + tangible);
 
 			// list of descriptions - TODO : filter descriptions by relevant topics 
 			List<Description> descs = knowledge.getEntityDescriptions(tangible);

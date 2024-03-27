@@ -11,10 +11,13 @@ import java.util.Set;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.reasoner.Reasoner;
+import org.apache.jena.reasoner.ReasonerRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,15 +45,16 @@ public class HaiReasonerTests {
         try {
 
             // create a model from the specified file path
-            model = ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM_RDFS_INF);
+            this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM_RDFS_INF);
+                //OntModelSpec.OWL_LITE_MEM_RDFS_INF);
 
             // prepare the model            
-            model.getDocumentManager().addAltEntry(
+            this.model.getDocumentManager().addAltEntry(
                 HermesDictionary.HERMES_NS.getNs(), 
                 "file:" + path);
-                
+
             // read ontology file
-            model.read(HermesDictionary.HERMES_NS.getNs());
+            this.model.read(HermesDictionary.HERMES_NS.getNs());
 
 		} catch (Exception ex) {
 			System.err.println(ex.getMessage());
