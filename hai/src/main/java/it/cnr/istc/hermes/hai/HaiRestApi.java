@@ -65,7 +65,7 @@ public class HaiRestApi implements ErrorController {
 	 */
 	@GetMapping("/")
 	public String home() {
-		return "Hi, this si the HERMES AI Server API endpoint!.";
+		return "Hi, this is the HERMES AI Server API endpoint!.";
 	}
 
 	/**

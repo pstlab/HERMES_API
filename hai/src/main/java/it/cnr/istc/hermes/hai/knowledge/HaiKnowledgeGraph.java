@@ -3,10 +3,14 @@ package it.cnr.istc.hermes.hai.knowledge;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.reasoner.Reasoner;
+import org.apache.jena.reasoner.ReasonerRegistry;
+import org.apache.jena.reasoner.rulesys.OWLMiniReasonerFactory;
 import org.apache.jena.rdf.model.Resource;
 
 import java.util.*;
@@ -24,6 +28,7 @@ public class HaiKnowledgeGraph {
     private String modelNs;
     private String modelPath;
     private OntModel model;
+    private InfModel iModel;
 
     /**
      * 
@@ -45,7 +50,13 @@ public class HaiKnowledgeGraph {
         try {
 
             // create a model from the specified file path
-            this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM_RDFS_INF);
+            this.model = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM);
+                //OntModelSpec.OWL_LITE_MEM_RDFS_INF);
+
+            Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
+            reasoner.bindSchema(this.model);
+            // create inference model
+            this.iModel = ModelFactory.createInfModel(reasoner, this.model);
 
             // prepare the model            
             this.model.getDocumentManager().addAltEntry(domainSpace, "file:" + owlFilePath);
