@@ -19,9 +19,14 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
 import it.cnr.istc.hermes.hai.exception.ReasonerSetupException;
+import it.cnr.istc.hermes.hai.model.CulturalEditorActor;
 import it.cnr.istc.hermes.hai.model.CulturalEntity;
 import it.cnr.istc.hermes.hai.model.Description;
+import it.cnr.istc.hermes.hai.model.IntangibleCulturalEntity;
+import it.cnr.istc.hermes.hai.model.ResidualCulturalEntity;
+import it.cnr.istc.hermes.hai.model.TangibleCulturalEntity;
 import it.cnr.istc.hermes.hai.model.Topic;
+import it.cnr.istc.hermes.hai.model.ex.CulturalEntityExtractionException;
 
 /**
  * 
@@ -266,19 +271,13 @@ public class HaiKnowledgeGraph {
 
         // list of retrieved descriptions
         List<Description> list = new ArrayList<>();
-        // get property w3id:hasDescription
-        Property hasDesc = this.model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasDescription");
-        // get property w3id:hasTopic
-        Property hasTopic = this.model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasTopic");
-        // get property rdfs:comment
-        Property hasComment = this.model.getProperty(HermesDictionary.RDFS_NS.getNs() + "comment");
-        // get rdfs:label data property
-        Property label = this.model.getProperty(HermesDictionary.HERMES_NS.getNs() + "label");
-
+    
         // retrieve resource associated with the entity
         Resource res = this.getResourceById(entity.getId());
         // query the model
-        Iterator<Statement> it = res.listProperties(hasDesc);
+        Iterator<Statement> it = res.listProperties(this.model.getProperty(
+            HermesDictionary.W3ID_NS.getNs() + "hasDescription"
+        ));
         // iterate over found statements     
         while (it.hasNext()) {
 
@@ -286,10 +285,12 @@ public class HaiKnowledgeGraph {
             Statement s = it.next();
             // get description object
             Resource obj = s.getObject().asResource();
-            if (obj.getProperty(hasComment) != null) {
+            if (obj.getProperty(this.model.getProperty(
+                HermesDictionary.RDFS_NS.getNs() + "comment")) != null) {
                 
                 // get comment
-                Literal text = obj.getProperty(hasComment).getObject().asLiteral();
+                Literal text = obj.getProperty(this.model.getProperty(
+                    HermesDictionary.RDFS_NS.getNs() + "comment")).getObject().asLiteral();
 
                 // create description object model
                 Description desc = new Description();
@@ -298,7 +299,10 @@ public class HaiKnowledgeGraph {
 
 
                 // get topic
-                Iterator<Statement> dts = obj.listProperties(hasTopic);
+                Iterator<Statement> dts = obj.listProperties(this.model.getProperty(
+                    HermesDictionary.W3ID_NS.getNs() + "hasTopic"));
+
+                // check description statements
                 while (dts.hasNext()) {
 
                     // get associated topic resource
@@ -307,7 +311,8 @@ public class HaiKnowledgeGraph {
                      // create topic
                     Topic topic = new Topic();
                     topic.setId(dt.getURI());
-                    Statement dtl = dt.getProperty(label);
+                    Statement dtl = dt.getProperty(this.model.getProperty(
+                        HermesDictionary.RDFS_NS.getNs() + "label"));
                     topic.setLabel(dtl == null ? dt.getLocalName() : dtl.getLiteral().getString());
 
                     // add topic to description
@@ -339,51 +344,314 @@ public class HaiKnowledgeGraph {
 
         // list of retrieved descriptions
         Set<CulturalEntity> set = new HashSet<>();
-
-        // get property w3id:hasDescription
-        Property hasDesc = model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasDescription");
-        // get property w3id:hasTopic
-        Property hasTopic = model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasTopic");
-        // get rdf:type property
-        Property type = model.getProperty(HermesDictionary.RDF_NS.getNs() + "type");
-        // get rdfs:label data property
-        Property label = model.getProperty(HermesDictionary.RDFS_NS.getNs() + "label");
-
+        
         // retrieve resource associated with the topic
         Resource res = model.getResource(topic.getId());
         // get the type of the given topic
-        Resource topicType = res.getProperty(type).getObject().asResource();
+        Resource topicType = res.getProperty(this.model.getProperty(
+            HermesDictionary.RDF_NS.getNs() + "type"
+        )).getObject().asResource();
         // list all topics of the retrieved type
-        Iterator<Statement> it = model.listStatements(null, type, topicType);
+        Iterator<Statement> it = model.listStatements(
+            null, 
+            this.model.getProperty(
+                HermesDictionary.RDF_NS.getNs() + "type"
+            ), topicType);
+
+        // iterate over statements
         while (it.hasNext()) {
 
             // get a correlated topic
             Resource t = it.next().getSubject();
             // list descriptions taggeted with the cuyrrent topic
-            Iterator<Statement> descStatements = model.listStatements(null, hasTopic, t);
+            Iterator<Statement> descStatements = model.listStatements(
+                null, 
+                this.model.getProperty(HermesDictionary.W3ID_NS.getNs() + "hasTopic"), 
+                t);
+
+            // iterate over statements
             while (descStatements.hasNext()) {
 
                 // get tagged description
                 Resource desc = descStatements.next().getSubject();
                 // get associated cultural entity
-                Iterator<Statement> entityStatements = model.listStatements(null, hasDesc, desc);
+                Iterator<Statement> entityStatements = model.listStatements(
+                    null, 
+                    this.model.getProperty(
+                        HermesDictionary.W3ID_NS.getNs() + "hasDescription"
+                    ), desc);
+
+                // iterate over statements
                 while (entityStatements.hasNext()) {
+
+                    // get statement
+                    Statement stat = entityStatements.next();
                     // get current entity 
-                    Resource entity = entityStatements.next().getSubject();
-                    // create cultural entity
-                    CulturalEntity e = new CulturalEntity();
-                    // set attributes
-                    e.setId(entity.getURI());
-                    Statement lStat = entity.getProperty(label);
-                    e.setLabel(lStat == null ? entity.getLocalName() : lStat.getString());
-                    // add entity to the result set
-                    set.add(e);
+                    Resource entity = stat.getSubject();
+                    try {
+
+                        // create cultural entity
+                        CulturalEntity e = this.extractCulturalEntity(entity, true);
+                        // add entity to the result set
+                        set.add(e);
+
+                    } catch (CulturalEntityExtractionException ex) {
+                        System.out.println("Error while extracting information for resource \"" + entity.getURI() + "\" (" + stat + ") as cultural entity.\n\t- msg: " + ex.getMessage() + "\n");
+                    }
+                    
                 }
             }
         }
 
         // get the list
         return new ArrayList<>(set);
+    }
+
+    /**
+     * This method create cultural entity objects (either tangible or intangible) 
+     * by retrieving basic information associated. 
+     * 
+     * The "detailed" flag is used to determine if a in-depth inspection of associated entities is 
+     * necessary or not. This flag is particularly relevant to avoid "loops" in the navigation of the
+     * asserted relationships between cultural entities
+     * 
+     * @param resource
+     * @param detailed
+     * @return
+     * @throws CulturalEntityExtractionException
+     */
+    public CulturalEntity extractCulturalEntity(Resource resource, boolean detailed) throws CulturalEntityExtractionException {
+
+        // check if the resource is an tangible or an intangible object
+        Iterator<Statement> tanIt = this.model.listStatements(
+                this.model.getResource(resource.getURI()), 
+                this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type"), 
+                this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "TangibleCulturalProperty"));
+
+        Iterator<Statement> intanIt = this.model.listStatements(
+            this.model.getResource(resource.getURI()), 
+            this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type"), 
+                    this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "IntangibleCulturalProperty"));
+
+        Iterator<Statement> resIt = this.model.listStatements(
+            this.model.getResource(resource.getURI()), 
+            this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type"), 
+                                this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "CulturalPropertyResidual"));
+
+        // check the type of cultural entity
+        if (tanIt.hasNext()) {
+
+            // create tangible cultural entity
+            TangibleCulturalEntity tangible = new TangibleCulturalEntity();
+            tangible.setId(resource.getURI());
+            // get label if any through rdfs:label property
+            Resource label = resource.getPropertyResourceValue(this.model.getProperty(
+                HermesDictionary.RDFS_NS.getNs() + "label"));
+
+            // set label from associated literal
+            tangible.setLabel(label == null ? resource.getLocalName() : label.asLiteral().getString());
+        
+            // set hermes:visiting_time data property
+            Statement visiting = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "visiting_time"));
+                System.out.println(">>> (" + tangible.getLabel() +") visiting_time - " + visiting);
+            tangible.setVisitingTime(visiting != null ? visiting.getObject().asLiteral().getLong() : 1);
+
+            // set hermes:visitability data property
+            Statement visitab = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "visitability"));
+            tangible.setVisitability(visitab != null ? visitab.getObject().asLiteral().getString() : "unknown");
+
+            // set arco_location:long data property
+            Statement longi = resource.getProperty(this.model.getProperty(
+                HermesDictionary.ARCO_LOCATION_NS.getNs() + "long"));
+            tangible.setLongitude(longi != null ? longi.getObject().asLiteral().getDouble() : 0.0);
+
+            // set arco_location:lat data property
+            Statement lati = resource.getProperty(this.model.getProperty(
+                HermesDictionary.ARCO_LOCATION_NS.getNs() + "lat"));
+            tangible.setLatitude(lati != null ? lati.getObject().asLiteral().getDouble() : 0.0);
+
+            // set hermes:opening_hours data property
+            Statement opnHours = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "opening_hours"));
+            tangible.setOpenHours(opnHours != null ? opnHours.getObject().asLiteral().getString() : "unknown");
+
+
+            // set hermes:accessibility_motor_disability data property
+            Statement accMotor = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "accessibility_motor_disability"));
+            tangible.setAccMotorDisab(accMotor != null ? accMotor.getObject().asLiteral().getBoolean() : false);
+
+
+            // set hermes:visiting_price data property
+            Statement vPrice = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "visiting_price"));
+            tangible.setPrice(vPrice != null ? vPrice.getObject().asLiteral().getString() : "unknown");
+
+            // set hermes:accessibility_groups data property
+            Statement accGroups = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "accessibility_groups"));
+            tangible.setGroupVisit(accGroups != null ? accGroups.getObject().asLiteral().getBoolean() : false);
+
+
+            // set hermes:accessibility_elderly data property
+            Statement accEld = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "accessibility_elderly"));
+            tangible.setAccElderly(accEld != null ? accEld.getObject().asLiteral().getBoolean() : false);
+
+            // set arco_context:address data property
+            Statement add = resource.getProperty(this.model.getProperty(
+                HermesDictionary.ARCO_CONTEXT_NS + "address"));
+            tangible.setAddress(add != null ? add.getObject().asLiteral().getString() : "unknown");
+
+
+            // check resource editor
+            Statement eStat = resource.getProperty(this.model.getProperty(
+                HermesDictionary.PROVO.getNs() + "wasAttributedTo"));
+
+            // add editor information if specified
+            if (eStat != null) {
+
+                // get resource
+                Resource editor = eStat.getObject().asResource();
+                // create editor
+                CulturalEditorActor actor = new CulturalEditorActor();
+                actor.setId(editor.getURI());
+
+                // get label
+                Statement aLabel = editor.getProperty(this.model.getProperty(
+                    HermesDictionary.RDFS_NS.getNs() + "label"
+                ));
+
+                // set label
+                actor.setLabel(aLabel == null ? "unknown" : aLabel.getObject().asLiteral().getString());
+            }
+
+
+            // check detailed flag
+            if (detailed) {
+
+                // list of correlated entities (either tangible or intangible)
+                Set<CulturalEntity> correlated = new HashSet<>();
+                // retrieve associated entities
+                Iterator<Statement> it = resource.listProperties(this.model.getProperty(
+                    HermesDictionary.HERMES_NS.getNs() + "isCorrelatedWith"));
+                // check correlated resources
+                while (it.hasNext()) {
+
+                    // get correlated resource
+                    Resource res = it.next().getObject().asResource();
+                    // retrieve associated cultural entity
+                    CulturalEntity correlatedEntity = this.extractCulturalEntity(res, false);
+                    // add to the set
+                    correlated.add(correlatedEntity);
+                }
+
+                // set associated entities
+                tangible.setAssociatedEntities(new ArrayList<>(correlated));
+
+                // get structural parent entity if any
+                Statement parentStatement = resource.getProperty(this.model.getProperty(
+                    HermesDictionary.ARCO_CORE_NS.getNs() + "isPartOf"));
+                // check retrieve resource
+                if (parentStatement != null) {
+                    
+                    // extract necessary information
+                    CulturalEntity parent = this.extractCulturalEntity(parentStatement.getObject().asResource(), false);
+                    // set part of relationship
+                    tangible.setPartOf(parent);
+                }
+            }
+
+            // return the tangible
+            return tangible;
+
+        } else if (intanIt.hasNext()) {
+
+            // create intangible cultural entity
+            CulturalEntity intangible = new IntangibleCulturalEntity();
+            intangible.setId(resource.getURI());
+            // get label if any through rdfs:label property
+            Resource label = resource.getPropertyResourceValue(this.model.getProperty(
+                HermesDictionary.RDFS_NS.getNs() + "label"
+            ));
+
+            // set label from associated literal
+            intangible.setLabel(label == null ? resource.getLocalName() : label.asLiteral().getString());
+
+            // check resource editor
+            Statement sEditor = resource.getProperty(this.model.getProperty(
+                HermesDictionary.PROVO.getNs() + "wasAttributedTo"
+            ));
+
+            // add editor information if specified
+            if (sEditor != null) {
+
+                // get resource
+                Resource editor = sEditor.getObject().asResource();
+                // create editor
+                CulturalEditorActor actor = new CulturalEditorActor();
+                actor.setId(editor.getURI());
+
+                // get label
+                Resource aLabel = editor.getPropertyResourceValue(this.model.getProperty(
+                    HermesDictionary.RDFS_NS.getNs() + "label"
+                ));
+
+                // set label
+                actor.setLabel(aLabel == null ? "Unknown" : aLabel.asLiteral().getString());
+            }
+
+
+            // get the intangible
+            return intangible;
+
+        } else if (resIt.hasNext()) {
+
+            // create intangible cultural entity
+            CulturalEntity residual = new ResidualCulturalEntity();
+            residual.setId(resource.getURI());
+            // get label if any through rdfs:label property
+            Resource label = resource.getPropertyResourceValue(this.model.getProperty(
+                HermesDictionary.RDFS_NS.getNs() + "label"
+            ));
+
+            // set label from associated literal
+            residual.setLabel(label == null ? resource.getLocalName() : label.asLiteral().getString());
+
+            // check resource editor
+            Statement sEditor = resource.getProperty(this.model.getProperty(
+                HermesDictionary.PROVO.getNs() + "wasAttributedTo"
+            ));
+
+            // add editor information if specified
+            if (sEditor != null) {
+
+                // get resource
+                Resource editor = sEditor.getObject().asResource();
+                // create editor
+                CulturalEditorActor actor = new CulturalEditorActor();
+                actor.setId(editor.getURI());
+
+                // get label
+                Resource aLabel = editor.getPropertyResourceValue(this.model.getProperty(
+                    HermesDictionary.RDFS_NS.getNs() + "label"
+                ));
+
+                // set label
+                actor.setLabel(aLabel == null ? "Unknown" : aLabel.asLiteral().getString());
+            }
+
+
+            // get the residual
+            return residual;
+
+        }else {
+
+            // unknown type of cultural entity
+            throw new CulturalEntityExtractionException("Unknown type of cultural entity resource:\n\t- resource: " + resource);
+        }
     }
 
     /**

@@ -29,6 +29,7 @@ import it.cnr.istc.hermes.hai.knowledge.HaiKnowledgeGraph;
 import it.cnr.istc.hermes.hai.knowledge.HermesDictionary;
 import it.cnr.istc.hermes.hai.knowledge.KnowledgeQuery;
 import it.cnr.istc.hermes.hai.model.*;
+import it.cnr.istc.hermes.hai.model.ex.CulturalEntityExtractionException;
 
 /**
  * Hermes AI-based Component - REST API
@@ -159,18 +160,18 @@ public class HaiRestApi implements ErrorController {
 			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
-		// get rdfs:label data property
-		Property label = knowledge.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label");
-
 		// retrieve all the individuals of arco:TangibleCulturalProperty
 		List<Resource> res = knowledge.listResourcesOfType(HermesDictionary.ARCO_NS.getNs() + "CulturalProperty");
 		for (Resource r : res) {
-			// create a entity object
-			CulturalEntity entity = new CulturalEntity();
-			entity.setId(r.getURI());
-			Statement rLabel = r.getProperty(label);
-			entity.setLabel(rLabel == null ? r.getLocalName() : rLabel.getString());
-			list.add(entity);
+			
+			try {
+				// extract cultural entity
+				CulturalEntity entity = knowledge.extractCulturalEntity(r, true);
+				// add entity
+				list.add(entity);
+			} catch (CulturalEntityExtractionException ex) {
+				System.out.println("Error while extracting information from resource \"" + r +"\" as cultural entity:\n\t-msg: " + ex.getMessage());
+			}
 		}
 
 		// get the list
@@ -229,21 +230,19 @@ public class HaiRestApi implements ErrorController {
 			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
 		}
 
-		// get rdfs:label data property
-		Property label = knowledge.getPropertyById(HermesDictionary.RDFS_NS.getNs() + "label");
-
 		// get the resource
 		Resource res  = knowledge.getResourceById(query.getUri());
 		if (res != null) {
 
-			// create cultural entity
-			CulturalEntity entity = new CulturalEntity();
-			entity.setId(res.getURI());
-			Statement sLab = res.getProperty(label);
-			// set resource label
-			entity.setLabel(sLab == null ? res.getLocalName() : sLab.getString());
-			// retrieve all the description of the given entity
-			list = knowledge.getEntityDescriptions(entity);
+
+			try {
+				// extract cultural entity
+				CulturalEntity entity = knowledge.extractCulturalEntity(res, true);
+				// retrieve all the description of the given entity
+				list = knowledge.getEntityDescriptions(entity);
+			} catch (CulturalEntityExtractionException ex) {
+				System.out.println("Error while extracting informatio from resource \"" + res +"\" as cultural entity:\n\t-msg: " + ex.getMessage());
+			}
 		}
 
 		// get the list
@@ -280,15 +279,13 @@ public class HaiRestApi implements ErrorController {
 		// prepare POIs for each tangible cultural entity
 		for (CulturalEntity tangible : tangibles) {
 
-			System.out.println(">> Found tangible for POI: " + tangible);
-
-			// list of descriptions - TODO : filter descriptions by relevant topics 
+			// list of descriptions
 			List<Description> descs = knowledge.getEntityDescriptions(tangible);
-			// check data
+			// consider only entities with at least one description associated
 			if (!descs.isEmpty()) {
 
 				// prepare the list of associated intangibles
-				List<CulturalEntity> intangibles = new ArrayList<>();
+				Set<CulturalEntity> intangibles = new HashSet<>();
 				// retrieve descriptions' topics
 				for (Description desc : descs) {
 					// check description's topics
@@ -302,7 +299,7 @@ public class HaiRestApi implements ErrorController {
 				Poi poi = new Poi();
 				poi.setTangible(tangible);
 				poi.setDescriptions(descs);
-				poi.setIntangibles(intangibles);
+				poi.setIntangibles(new ArrayList<>(intangibles));
 
 				// store the poi into the repository
 				this.poiRepo.save(poi);
@@ -316,15 +313,18 @@ public class HaiRestApi implements ErrorController {
 		// check found POIs
 		if (!pois.isEmpty()) {
 			
-			// TODO -- IMPLEMENT PLANNING PROCESS
+			/*
+			 * TODO -- IMPLEMENT PLANNING PROCESS
+			 */
 		
 			// create trip
 			trip = new PlannedTrip();
 			trip.setCounter(0);
-			trip.setDuration(1000);
+			trip.setDuration(request.getDuration());
 			trip.setHops(new ArrayList<>(pois));
 			trip.setRanking(0);
 			trip.setRequest(request);
+
 			// save planned trip
 			this.tripRepo.save(trip);
 		}

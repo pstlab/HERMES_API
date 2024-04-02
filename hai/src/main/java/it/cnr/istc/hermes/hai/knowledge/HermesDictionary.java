@@ -17,6 +17,8 @@ public enum HermesDictionary {
 
     ARCO_CORE_NS("https://w3id.org/arco/ontology/core/"),
 
+    ARCO_LOCATION_NS("https://w3id.org/arco/ontology/location/"),
+
     ARCO_CONTEXT_NS("https://w3id.org/arco/ontology/context-description/"),
 
     PROVO("http://www.w3.org/ns/prov#"),

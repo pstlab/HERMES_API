@@ -5,10 +5,18 @@ package it.cnr.istc.hermes.hai.model;
  * 
  * In particular, the object represents either tangible or intangible cultural properties.
  */
-public class CulturalEntity {
+public abstract class CulturalEntity {
     
     private String id;                  // the uri from the knowledge base
     private String label;               // the label from the knowledge base
+    private boolean tangible;           // flag specifying tangible/intanible entity
+
+    /**
+     * 
+     */
+    protected CulturalEntity(boolean tangible) {
+        this.tangible = tangible;
+    }
 
     /**
      * 
@@ -63,6 +71,6 @@ public class CulturalEntity {
      */
     @Override
     public String toString() {
-        return "[CulturalProperty] {\"id\": \"" + this.id + "\", \"label\": \"" + this.label + "\"}";
+        return "[CulturalEntity] {\"id\": \"" + this.id + "\", \"label\": \"" + this.label + "\", \"tangible\": " + this.tangible + "}";
     }
 }
