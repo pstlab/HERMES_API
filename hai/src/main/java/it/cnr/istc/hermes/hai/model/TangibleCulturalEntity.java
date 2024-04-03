@@ -27,9 +27,10 @@ public class TangibleCulturalEntity extends CulturalEntity {
 
     /**
      * 
+     * @param detailed
      */
-    public TangibleCulturalEntity() {
-        super(true);
+    public TangibleCulturalEntity(boolean detailed) {
+        super(true, detailed);
         this.correlatedEntities = new ArrayList<>();
     }
 

@@ -9,9 +9,10 @@ public class ResidualCulturalEntity extends CulturalEntity {
 
     /**
      * 
+     * @param detailed
      */
-    public ResidualCulturalEntity() {
-        super(false);
+    public ResidualCulturalEntity(boolean detailed) {
+        super(false, detailed);
     }
 
     /**

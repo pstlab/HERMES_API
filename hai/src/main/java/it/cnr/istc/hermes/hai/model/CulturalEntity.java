@@ -10,12 +10,16 @@ public abstract class CulturalEntity {
     private String id;                  // the uri from the knowledge base
     private String label;               // the label from the knowledge base
     private boolean tangible;           // flag specifying tangible/intanible entity
+    private boolean detailed;           // flag true if all data has been retrieved
 
     /**
      * 
+     * @param tangible
+     * @param detailed
      */
-    protected CulturalEntity(boolean tangible) {
+    protected CulturalEntity(boolean tangible, boolean detailed) {
         this.tangible = tangible;
+        this.detailed = detailed;
     }
 
     /**
@@ -64,6 +68,14 @@ public abstract class CulturalEntity {
      */
     public boolean isTangible() {
         return tangible;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public boolean isDetailed() {
+        return detailed;
     }
 
     /**

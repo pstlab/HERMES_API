@@ -250,6 +250,28 @@ public class HaiRestApi implements ErrorController {
 	}
 
 	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
+	@GetMapping("/knowledge/entity/data")
+	public CulturalEntity getEntityData(@Valid @RequestBody KnowledgeQuery query) throws CulturalEntityExtractionException {
+		
+		// check reasoner 
+		if (knowledge == null) {
+			knowledge = new HaiKnowledgeGraph();
+			// load a default model
+			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+		}
+
+		
+		// get the resource
+		Resource res  = knowledge.getResourceById(query.getUri());
+		// extract cultural entity
+		return knowledge.extractCulturalEntity(res, true);
+	}
+
+	/**
 	 * Post a request for planning a new trip for a user
 	 * 
 	 * @param request

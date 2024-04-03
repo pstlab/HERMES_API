@@ -9,9 +9,10 @@ public class IntangibleCulturalEntity extends CulturalEntity {
 
     /**
      * 
+     * @param detailed
      */
-    public IntangibleCulturalEntity() {
-        super(false);
+    public IntangibleCulturalEntity(boolean detailed) {
+        super(false, detailed);
     }
 
     /**

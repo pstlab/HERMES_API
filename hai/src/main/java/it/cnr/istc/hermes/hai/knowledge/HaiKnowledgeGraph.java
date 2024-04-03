@@ -423,6 +423,11 @@ public class HaiKnowledgeGraph {
      */
     public CulturalEntity extractCulturalEntity(Resource resource, boolean detailed) throws CulturalEntityExtractionException {
 
+        // check input resource
+        if (resource == null) {
+            throw new CulturalEntityExtractionException("No resource given as input");
+        }
+
         // check if the resource is an tangible or an intangible object
         Iterator<Statement> tanIt = this.model.listStatements(
                 this.model.getResource(resource.getURI()), 
@@ -443,7 +448,7 @@ public class HaiKnowledgeGraph {
         if (tanIt.hasNext()) {
 
             // create tangible cultural entity
-            TangibleCulturalEntity tangible = new TangibleCulturalEntity();
+            TangibleCulturalEntity tangible = new TangibleCulturalEntity(detailed);
             tangible.setId(resource.getURI());
             // get label if any through rdfs:label property
             Resource label = resource.getPropertyResourceValue(this.model.getProperty(
@@ -573,7 +578,7 @@ public class HaiKnowledgeGraph {
         } else if (intanIt.hasNext()) {
 
             // create intangible cultural entity
-            CulturalEntity intangible = new IntangibleCulturalEntity();
+            CulturalEntity intangible = new IntangibleCulturalEntity(detailed);
             intangible.setId(resource.getURI());
             // get label if any through rdfs:label property
             Resource label = resource.getPropertyResourceValue(this.model.getProperty(
@@ -613,7 +618,7 @@ public class HaiKnowledgeGraph {
         } else if (resIt.hasNext()) {
 
             // create intangible cultural entity
-            CulturalEntity residual = new ResidualCulturalEntity();
+            CulturalEntity residual = new ResidualCulturalEntity(detailed);
             residual.setId(resource.getURI());
             // get label if any through rdfs:label property
             Resource label = resource.getPropertyResourceValue(this.model.getProperty(
