@@ -268,12 +268,25 @@ public class HaiRestApi implements ErrorController {
 		Set<Poi> pois = new HashSet<>();
 		// save the received request
 		this.reqRepo.save(request);	
+
 		// set of relevant tangible entities
 		Set<CulturalEntity> tangibles = new HashSet<>();
+		// set of intangible/residual entities
+		Set<CulturalEntity> intangibles = new HashSet<>();
+
 		// check tangible cultural properties
 		for (Topic topic : request.getTopics()) {
-			// retrieve tangibles
-			tangibles.addAll(knowledge.getTangibleEntitiesByTopic(topic));
+
+			// get cultural entity
+			List<CulturalEntity> entities = knowledge.getEntitiesByTopic(topic);
+			for (CulturalEntity entity : entities) {
+				// check if tangible
+				if (entity.isTangible()) {
+					tangibles.add(entity);
+				} else {
+					intangibles.add(entity);
+				}
+			}
 		}
 
 		// prepare POIs for each tangible cultural entity
@@ -284,8 +297,8 @@ public class HaiRestApi implements ErrorController {
 			// consider only entities with at least one description associated
 			if (!descs.isEmpty()) {
 
-				// prepare the list of associated intangibles
-				Set<CulturalEntity> intangibles = new HashSet<>();
+				/* prepare the list of associated intangibles
+				Set<CulturalEntity> entityIntangibles = new HashSet<>();
 				// retrieve descriptions' topics
 				for (Description desc : descs) {
 					// check description's topics
@@ -293,7 +306,8 @@ public class HaiRestApi implements ErrorController {
 						// retrieve intangibles
 						intangibles.addAll(knowledge.getIntangibleEntitiesByTopic(dTopic));
 					}
-				}
+					
+				}*/
 
 				// create contextual POI
 				Poi poi = new Poi();

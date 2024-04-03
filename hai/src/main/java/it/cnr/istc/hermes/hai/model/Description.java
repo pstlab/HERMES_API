@@ -11,7 +11,7 @@ public class Description {
     private String id;                  
     private String text;
     private List<Topic> topics;
-    private CulturalEntity entity;
+    //private CulturalEntity entity;
 
     /**
      * 
@@ -55,10 +55,10 @@ public class Description {
     /**
      * 
      * @return
-     */
+     *
     public CulturalEntity getEntity() {
         return entity;
-    }
+    }*/
 
     /**
      * 
@@ -79,10 +79,10 @@ public class Description {
     /**
      * 
      * @param entity
-     */
+     *
     public void setEntity(CulturalEntity entity) {
         this.entity = entity;
-    }
+    }*/
 
     /**
      * 

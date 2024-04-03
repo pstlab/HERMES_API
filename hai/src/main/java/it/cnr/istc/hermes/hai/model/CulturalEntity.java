@@ -60,6 +60,14 @@ public abstract class CulturalEntity {
 
     /**
      * 
+     * @return
+     */
+    public boolean isTangible() {
+        return tangible;
+    }
+
+    /**
+     * 
      */
     @Override
     public boolean equals(Object obj) {

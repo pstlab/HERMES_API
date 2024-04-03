@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class TangibleCulturalEntity extends CulturalEntity {
 
-    private List<CulturalEntity> associatedEntities;
+    private List<CulturalEntity> correlatedEntities;
     private CulturalEntity partOf;
     private CulturalEditorActor editorActor;
 
@@ -30,15 +30,15 @@ public class TangibleCulturalEntity extends CulturalEntity {
      */
     public TangibleCulturalEntity() {
         super(true);
-        this.associatedEntities = new ArrayList<>();
+        this.correlatedEntities = new ArrayList<>();
     }
 
-    public void setAssociatedEntities(List<CulturalEntity> associatedEntities) {
-        this.associatedEntities = associatedEntities;
+    public void setCorrelatedEntities(List<CulturalEntity> associatedEntities) {
+        this.correlatedEntities = associatedEntities;
     }
 
-    public List<CulturalEntity> getAssociatedEntities() {
-        return associatedEntities;
+    public List<CulturalEntity> getCorrelatedEntities() {
+        return correlatedEntities;
     }
 
     public CulturalEntity getPartOf() {

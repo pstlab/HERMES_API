@@ -320,7 +320,7 @@ public class HaiKnowledgeGraph {
                 }
                 
                 // set cultural entity
-                desc.setEntity(entity);
+                //desc.setEntity(entity);
                 // add description to the list
                 list.add(desc);
             }
@@ -351,6 +351,7 @@ public class HaiKnowledgeGraph {
         Resource topicType = res.getProperty(this.model.getProperty(
             HermesDictionary.RDF_NS.getNs() + "type"
         )).getObject().asResource();
+
         // list all topics of the retrieved type
         Iterator<Statement> it = model.listStatements(
             null, 
@@ -454,7 +455,6 @@ public class HaiKnowledgeGraph {
             // set hermes:visiting_time data property
             Statement visiting = resource.getProperty(this.model.getProperty(
                 HermesDictionary.HERMES_NS.getNs() + "visiting_time"));
-                System.out.println(">>> (" + tangible.getLabel() +") visiting_time - " + visiting);
             tangible.setVisitingTime(visiting != null ? visiting.getObject().asLiteral().getLong() : 1);
 
             // set hermes:visitability data property
@@ -502,7 +502,7 @@ public class HaiKnowledgeGraph {
 
             // set arco_context:address data property
             Statement add = resource.getProperty(this.model.getProperty(
-                HermesDictionary.ARCO_CONTEXT_NS + "address"));
+                HermesDictionary.ARCO_CONTEXT_NS.getNs() + "address"));      
             tangible.setAddress(add != null ? add.getObject().asLiteral().getString() : "unknown");
 
 
@@ -526,6 +526,9 @@ public class HaiKnowledgeGraph {
 
                 // set label
                 actor.setLabel(aLabel == null ? "unknown" : aLabel.getObject().asLiteral().getString());
+
+                // set editor
+                tangible.setEditorActor(actor);
             }
 
 
@@ -549,7 +552,7 @@ public class HaiKnowledgeGraph {
                 }
 
                 // set associated entities
-                tangible.setAssociatedEntities(new ArrayList<>(correlated));
+                tangible.setCorrelatedEntities(new ArrayList<>(correlated));
 
                 // get structural parent entity if any
                 Statement parentStatement = resource.getProperty(this.model.getProperty(
@@ -653,74 +656,4 @@ public class HaiKnowledgeGraph {
             throw new CulturalEntityExtractionException("Unknown type of cultural entity resource:\n\t- resource: " + resource);
         }
     }
-
-    /**
-     * Retrieve all the tangible entities that are associated with the given topic through their descriptions.
-     * 
-     * @param topic
-     * @return
-     */
-    public List<CulturalEntity> getTangibleEntitiesByTopic(Topic topic) {
-
-        // list of retrieved descriptions
-        Set<CulturalEntity> set = new HashSet<>();
-        // get rdf:type property
-        Property type = this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type");
-        // get arco:TangibleCulturalProperty type
-        Resource clazz = this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "TangibleCulturalProperty");
-
-        // get cultural entities associated with the specified topic
-        List<CulturalEntity> entities = this.getEntitiesByTopic(topic);
-        for (CulturalEntity entity : entities) {
-            // check statement to type
-            Iterator<Statement> it = this.model.listStatements(
-                this.model.getResource(entity.getId()), 
-                type, 
-                clazz);
-
-            // check statement results
-            if (it.hasNext()) {
-                // add the entity to the result set
-                set.add(entity);
-            }
-        }
- 
-         // get the list
-         return new ArrayList<>(set);
-    }
-
-    /**
-     * Retrieve all the intangible entities that are associated with the given topic thorough their descriptions.
-     * 
-     * @param topic
-     * @return
-     */
-    public List<CulturalEntity> getIntangibleEntitiesByTopic(Topic topic) {
-
-        // list of retrieved descriptions
-        Set<CulturalEntity> set = new HashSet<>();
-        // get rdf:type property
-        Property type = this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type");
-        // get arco:TangibleCulturalProperty type
-        Resource clazz = this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "IntangibleCulturalProperty");
-
-        // get cultural entities associated with the specified topic
-        List<CulturalEntity> entities = this.getEntitiesByTopic(topic);
-        for (CulturalEntity entity : entities) {
-            // check statement to type
-            Iterator<Statement> it = this.model.listStatements(
-                this.model.getResource(entity.getId()), 
-                type, 
-                clazz);
-
-            // check statement results
-            if (it.hasNext()) {
-                // add the entity to the result set
-                set.add(entity);
-            }
-        }
- 
-         // get the list
-         return new ArrayList<>(set);
-   }
 }
