@@ -7,10 +7,11 @@ package it.cnr.istc.hermes.hai.model;
  */
 public abstract class CulturalEntity {
     
-    private String id;                  // the uri from the knowledge base
-    private String label;               // the label from the knowledge base
-    private boolean tangible;           // flag specifying tangible/intanible entity
-    private boolean detailed;           // flag true if all data has been retrieved
+    private String id;                      // the uri from the knowledge base
+    private String label;                   // the label from the knowledge base
+    private boolean tangible;               // flag specifying tangible/intanible entity
+    private boolean detailed;               // flag true if all data has been retrieved
+    private String culturalPropertyType;    // ontological type of cultural entity
 
     /**
      * 
@@ -76,6 +77,14 @@ public abstract class CulturalEntity {
      */
     public boolean isDetailed() {
         return detailed;
+    }
+
+    public String getCulturalPropertyType() {
+        return culturalPropertyType;
+    }
+
+    public void setCulturalPropertyType(String culturalPropertyType) {
+        this.culturalPropertyType = culturalPropertyType;
     }
 
     /**

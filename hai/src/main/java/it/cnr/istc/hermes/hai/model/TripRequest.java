@@ -3,6 +3,7 @@ package it.cnr.istc.hermes.hai.model;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,13 +22,17 @@ public class TripRequest {
     @NotNull
     private int duration;
 
+    @NotNull
+    @NotEmpty
+    private List<Topic> topics;
+
     private String id;
     private Date time;
     private float[] userLocation;
     private int groupSize;
     private boolean[] dVector;
     private boolean[] mVector;
-    private List<Topic> topics;
+    
     
     /**
      * 

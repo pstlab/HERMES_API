@@ -20,6 +20,8 @@ public class TangibleCulturalEntity extends CulturalEntity {
     private double latitude;
     private String openHours;
     private boolean accMotorDisab;
+    private boolean accHearingDisab;
+    private boolean accVisualDisab;
     private String price;
     private boolean groupVisit;
     private boolean accElderly;
@@ -137,5 +139,20 @@ public class TangibleCulturalEntity extends CulturalEntity {
 
     public void setGroupVisit(boolean groupVisit) {
         this.groupVisit = groupVisit;
+    }
+
+    public void setAccHearingDisab(boolean accHearingDisab) {
+        this.accHearingDisab = accHearingDisab;
+    }
+
+    public void setAccVisualDisab(boolean accVisualDisab) {
+        this.accVisualDisab = accVisualDisab;
+    }
+
+    public boolean isAccHearingDisab() {
+        return accHearingDisab;
+    }
+    public boolean isAccVisualDisab() {
+        return accVisualDisab;
     }
 }

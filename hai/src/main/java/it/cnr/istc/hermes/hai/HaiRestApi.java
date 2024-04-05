@@ -13,18 +13,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.servlet.http.HttpServletRequest;
 import it.cnr.istc.hermes.hai.db.mongo.PlannedTripRepository;
 import it.cnr.istc.hermes.hai.db.mongo.PoiRepository;
+import it.cnr.istc.hermes.hai.db.mongo.PostEntityRequestRepository;
 import it.cnr.istc.hermes.hai.db.mongo.TripRequestRepository;
+import it.cnr.istc.hermes.hai.exception.PostEntityException;
 import it.cnr.istc.hermes.hai.knowledge.HaiKnowledgeGraph;
 import it.cnr.istc.hermes.hai.knowledge.HermesDictionary;
 import it.cnr.istc.hermes.hai.knowledge.KnowledgeQuery;
@@ -43,15 +42,18 @@ public class HaiRestApi implements ErrorController {
 	private String model;
 
 	@Autowired
-	private TripRequestRepository reqRepo;			// mongoDB repo for received requests
+	private TripRequestRepository reqRepo;				// mongoDB repo for received requests
 
 	@Autowired
-	private PoiRepository poiRepo;					// mongoDB repo for generated POIs
+	private PoiRepository poiRepo;						// mongoDB repo for generated POIs
 
 	@Autowired
-	private PlannedTripRepository tripRepo;			// mongoDB repo for generated trips
+	private PlannedTripRepository tripRepo;				// mongoDB repo for generated trips
 
-	private static HaiKnowledgeGraph knowledge; 	// knowledge graph with embedded reasoner
+	@Autowired
+	private PostEntityRequestRepository postEntityRepo;	// mongoDB repo for requested POIs
+
+	private static HaiKnowledgeGraph knowledge; 		// knowledge graph with embedded reasoner
 
 	/*
 	 * 
@@ -91,12 +93,10 @@ public class HaiRestApi implements ErrorController {
 
 		// taxonomy of topic objects
 		Map<Topic, List<Topic>> result = new HashMap<>();
-
 		// check reasoner 
 		if (knowledge == null) {
-			knowledge = new HaiKnowledgeGraph();
-			// load a default model
-			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			// setup knowledge
+			this.setupKnowledge();
 		}
 
 		// get rdfs:label data property
@@ -152,12 +152,10 @@ public class HaiRestApi implements ErrorController {
 
 		// list of entities
 		List<CulturalEntity> list = new ArrayList<>();
-	
 		// check reasoner 
 		if (knowledge == null) {
-			knowledge = new HaiKnowledgeGraph();
-			// load a default model
-			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			// setup knowledge
+			this.setupKnowledge();
 		}
 
 		// retrieve all the individuals of arco:TangibleCulturalProperty
@@ -165,6 +163,7 @@ public class HaiRestApi implements ErrorController {
 		for (Resource r : res) {
 			
 			try {
+
 				// extract cultural entity
 				CulturalEntity entity = knowledge.extractCulturalEntity(r, true);
 				// add entity
@@ -186,13 +185,13 @@ public class HaiRestApi implements ErrorController {
 	 */
 	@GetMapping("/knowledge/entities2topic")
 	public List<CulturalEntity> getEntitiesRelatedToTopic(@Valid @RequestBody KnowledgeQuery query) { 
+		
 		// list of entities
 		List<CulturalEntity> list = new ArrayList<>();
 		// check reasoner 
 		if (knowledge == null) {
-			knowledge = new HaiKnowledgeGraph();
-			// load a default model
-			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			// setup knowledge
+			this.setupKnowledge();
 		}
 
 		// get the resource associated with the topic
@@ -220,14 +219,13 @@ public class HaiRestApi implements ErrorController {
 	 */
 	@GetMapping("/knowledge/descriptions")
 	public List<Description> getEntityDescriptions(@Valid @RequestBody KnowledgeQuery query) {
+		
 		// list of entities
 		List<Description> list = new ArrayList<>();
-		
 		// check reasoner 
 		if (knowledge == null) {
-			knowledge = new HaiKnowledgeGraph();
-			// load a default model
-			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			// setup knowledge
+			this.setupKnowledge();
 		}
 
 		// get the resource
@@ -259,9 +257,8 @@ public class HaiRestApi implements ErrorController {
 		
 		// check reasoner 
 		if (knowledge == null) {
-			knowledge = new HaiKnowledgeGraph();
-			// load a default model
-			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			// setup knowledge
+			this.setupKnowledge();
 		}
 
 		
@@ -282,9 +279,8 @@ public class HaiRestApi implements ErrorController {
 
 		// check reasoner 
 		if (knowledge == null) {
-			knowledge = new HaiKnowledgeGraph();
-			// load a default model
-			knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+			// setup knowledge
+			this.setupKnowledge();
 		}
 
 		Set<Poi> pois = new HashSet<>();
@@ -318,19 +314,6 @@ public class HaiRestApi implements ErrorController {
 			List<Description> descs = knowledge.getEntityDescriptions(tangible);
 			// consider only entities with at least one description associated
 			if (!descs.isEmpty()) {
-
-				/* prepare the list of associated intangibles
-				Set<CulturalEntity> entityIntangibles = new HashSet<>();
-				// retrieve descriptions' topics
-				for (Description desc : descs) {
-					// check description's topics
-					for (Topic dTopic : desc.getTopics()) {
-						// retrieve intangibles
-						intangibles.addAll(knowledge.getIntangibleEntitiesByTopic(dTopic));
-					}
-					
-				}*/
-
 				// create contextual POI
 				Poi poi = new Poi();
 				poi.setTangible(tangible);
@@ -370,6 +353,31 @@ public class HaiRestApi implements ErrorController {
 	}
 
 	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("/knowledge/entity")
+	protected String doPostEntity(@Valid @RequestBody PostEntityRequest request) {
+
+		// check reasoner 
+		if (knowledge == null) {
+			// setup knowledge
+			this.setupKnowledge();
+		}
+
+		// create the resource
+		Resource resource = this.doCreateResourceFromRequest(request);
+		// save the received request
+		this.postEntityRepo.save(request);
+		// return the ID of the node created into the Knowledge Graph
+		String returnedURI = resource.getURI() == null ? resource.getId().getLabelString() : resource.getURI();
+		return returnedURI;
+	}
+
+	
+
+	/**
 	 * Return the list of planned trips
 	 * 
 	 * @return
@@ -393,4 +401,75 @@ public class HaiRestApi implements ErrorController {
 		return this.poiRepo.findAll();
 	}
 
+	/**
+	 * 
+	 */
+	private void setupKnowledge() {
+		// create the instance of knowldege graph
+		knowledge = new HaiKnowledgeGraph();
+		// load a default model
+		knowledge.load(HermesDictionary.HERMES_NS.getNs(), this.model);
+
+		// restore resources from past requests
+		List<PostEntityRequest> requests = this.postEntityRepo.findAll();
+		for (PostEntityRequest request : requests) {
+			// create the instance
+			Resource res = this.doCreateResourceFromRequest(request);
+			System.out.println("> Restored resource from past request: " + res);
+		}
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	private Resource doCreateResourceFromRequest(PostEntityRequest request) {
+
+		// retrieve the resource representing the type 
+		String cpUri = request.getCulturalPropertyType();
+		Resource cp = knowledge.getResourceById(cpUri);
+		// check if CP exists
+		if (cp == null) {
+			// throw exception
+			throw new PostEntityException("No CulturalProperty class found for the given URI: <" + cpUri + ">");
+		}
+
+		// retrieve the resource representing the default editor
+		Resource editor = knowledge.getResourceById(
+			HermesDictionary.HERMES_NS.getNs() + "Hermes_User");
+
+
+		// create individual of the give class
+		Resource resource = knowledge.createResource(cp, request.getEntityLabel(), editor);
+		
+		// create individual of the description
+		Resource desc = knowledge.createResource(knowledge.getResourceById(
+			HermesDictionary.HERMES_NS.getNs() + "CulturalPropertyDescription"));
+		// tag the description with the topic
+		for (Topic topic : request.getTopics()) {
+
+			// retrieve resource
+			Resource rt = knowledge.getResourceById(topic.getId());
+			// tag the description with the topic
+			desc.addProperty(knowledge.getPropertyById(
+				HermesDictionary.W3ID_NS.getNs() + "hasTopic"), rt);
+		}
+
+		// associate the description with the text
+		desc.addProperty(knowledge.getPropertyById(
+			HermesDictionary.RDFS_NS.getNs() + "comment"), request.getText());
+
+
+		// associate the resource to the description
+		resource.addProperty(knowledge.getPropertyById(
+			HermesDictionary.W3ID_NS.getNs() + "hasDescription"), desc);
+
+		/**
+		 * TODO - COMPLETE resource with data properties and other necessary information
+		 */
+
+		// get created resource
+		return resource;
+	}
 }

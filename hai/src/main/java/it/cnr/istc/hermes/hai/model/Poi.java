@@ -18,10 +18,10 @@ public class Poi {
     private String id;
     private Date time;
     private Set<Description> descriptions;                                 // the thematic context characterizing the description of the cultural entity      
-    private CulturalEntity tangible;                                        // the physical entity associated with the contextual POI
-    private Set<CulturalEntity> intangibles;                               // the intangible entities associated with the physical one
+    private CulturalEntity tangible;                                       // the physical entity associated with the contextual POI
+    private Set<CulturalEntity> linkedEntities;                            // linked entities associated with the physical one
     private float ranking;                                                 // average ranking by users
-    private int counter;                                                    // frequency of use
+    private int counter;                                                   // frequency of use
 
     /**
      * 
@@ -30,7 +30,7 @@ public class Poi {
         this.id = "POI_" + POI_ID.getAndIncrement();
         this.time = new Date();
         this.descriptions = new HashSet<>();
-        this.intangibles = new HashSet<>();
+        this.linkedEntities = new HashSet<>();
     }
     
 
@@ -75,11 +75,11 @@ public class Poi {
     }
 
     public void setIntangibles(List<CulturalEntity> intangibles) {
-        this.intangibles = new HashSet<>(intangibles);
+        this.linkedEntities = new HashSet<>(intangibles);
     }
 
-    public Set<CulturalEntity> getIntangibles() {
-        return intangibles;
+    public Set<CulturalEntity> getLinkedEntities() {
+        return linkedEntities;
     }
 
     public float getRanking() {

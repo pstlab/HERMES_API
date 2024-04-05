@@ -3,7 +3,7 @@ package it.cnr.istc.hermes.hai.model;
 /**
  * 
  */
-public class ResidualCulturalEntity extends CulturalEntity {
+public class ResidualOrLandscapeArchitecturalCulturalEntity extends CulturalEntity {
 
     private CulturalEditorActor editorActor;
 
@@ -11,7 +11,7 @@ public class ResidualCulturalEntity extends CulturalEntity {
      * 
      * @param detailed
      */
-    public ResidualCulturalEntity(boolean detailed) {
+    public ResidualOrLandscapeArchitecturalCulturalEntity(boolean detailed) {
         super(false, detailed);
     }
 

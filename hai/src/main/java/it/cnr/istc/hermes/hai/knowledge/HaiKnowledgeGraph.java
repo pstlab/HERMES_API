@@ -23,7 +23,7 @@ import it.cnr.istc.hermes.hai.model.CulturalEditorActor;
 import it.cnr.istc.hermes.hai.model.CulturalEntity;
 import it.cnr.istc.hermes.hai.model.Description;
 import it.cnr.istc.hermes.hai.model.IntangibleCulturalEntity;
-import it.cnr.istc.hermes.hai.model.ResidualCulturalEntity;
+import it.cnr.istc.hermes.hai.model.ResidualOrLandscapeArchitecturalCulturalEntity;
 import it.cnr.istc.hermes.hai.model.TangibleCulturalEntity;
 import it.cnr.istc.hermes.hai.model.Topic;
 import it.cnr.istc.hermes.hai.model.ex.CulturalEntityExtractionException;
@@ -66,6 +66,7 @@ public class HaiKnowledgeGraph {
             // set parameters
             this.modelNs = domainSpace;
             this.modelPath = owlFilePath;
+
 
         } catch (Exception ex) {
             // raise exception
@@ -428,34 +429,44 @@ public class HaiKnowledgeGraph {
             throw new CulturalEntityExtractionException("No resource given as input");
         }
 
-        // check if the resource is an tangible or an intangible object
-        Iterator<Statement> tanIt = this.model.listStatements(
-                this.model.getResource(resource.getURI()), 
+        // check if the resource is a tangible object
+        Iterator<Statement> it1 = this.model.listStatements(
+                resource, 
                 this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type"), 
                 this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "TangibleCulturalProperty"));
 
-        Iterator<Statement> intanIt = this.model.listStatements(
-            this.model.getResource(resource.getURI()), 
+        // check if the resource is an intangible object
+        Iterator<Statement> it2 = this.model.listStatements(
+            resource, 
             this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type"), 
                     this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "IntangibleCulturalProperty"));
 
-        Iterator<Statement> resIt = this.model.listStatements(
-            this.model.getResource(resource.getURI()), 
+        // check if the resource is any other type of cultural object
+        Iterator<Statement> it3 = this.model.listStatements(
+            resource, 
             this.model.getProperty(HermesDictionary.RDF_NS.getNs() + "type"), 
-                                this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "CulturalPropertyResidual"));
+                                this.model.getResource(HermesDictionary.ARCO_NS.getNs() + "CulturalProperty"));
 
         // check the type of cultural entity
-        if (tanIt.hasNext()) {
+        if (it1.hasNext()) {
 
             // create tangible cultural entity
             TangibleCulturalEntity tangible = new TangibleCulturalEntity(detailed);
-            tangible.setId(resource.getURI());
+            tangible.setId(resource.getURI() == null ? resource.getId().getLabelString() : resource.getURI());
+
+            // get ontological type
+            Statement ts = resource.getProperty(this.model.getProperty(
+                HermesDictionary.RDF_NS.getNs() + "type"));
+            // set the URI of the ontological class
+            tangible.setCulturalPropertyType(ts.getObject().asResource().getURI());
+
+
             // get label if any through rdfs:label property
-            Resource label = resource.getPropertyResourceValue(this.model.getProperty(
+            Statement tLabel = resource.getProperty(this.model.getProperty(
                 HermesDictionary.RDFS_NS.getNs() + "label"));
 
             // set label from associated literal
-            tangible.setLabel(label == null ? resource.getLocalName() : label.asLiteral().getString());
+            tangible.setLabel(tLabel == null ? resource.getLocalName() : tLabel.getObject().asLiteral().getString());
         
             // set hermes:visiting_time data property
             Statement visiting = resource.getProperty(this.model.getProperty(
@@ -482,6 +493,16 @@ public class HaiKnowledgeGraph {
                 HermesDictionary.HERMES_NS.getNs() + "opening_hours"));
             tangible.setOpenHours(opnHours != null ? opnHours.getObject().asLiteral().getString() : "unknown");
 
+
+            // set hermes:accessibility_hearing_disability data property
+            Statement accHearing = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "accessibility_hearing_disability"));
+            tangible.setAccHearingDisab(accHearing != null ? accHearing.getObject().asLiteral().getBoolean() : false);
+
+            // set hermes:accessibility_visual_disability data property
+            Statement accVisual = resource.getProperty(this.model.getProperty(
+                HermesDictionary.HERMES_NS.getNs() + "accessibility_visual_disability"));
+            tangible.setAccVisualDisab(accVisual != null ? accVisual.getObject().asLiteral().getBoolean() : false);
 
             // set hermes:accessibility_motor_disability data property
             Statement accMotor = resource.getProperty(this.model.getProperty(
@@ -575,18 +596,25 @@ public class HaiKnowledgeGraph {
             // return the tangible
             return tangible;
 
-        } else if (intanIt.hasNext()) {
+        } else if (it2.hasNext()) {
 
             // create intangible cultural entity
             CulturalEntity intangible = new IntangibleCulturalEntity(detailed);
-            intangible.setId(resource.getURI());
+            intangible.setId(resource.getURI() == null ? resource.getId().getLabelString() : resource.getURI());
+
+            // get ontological type
+            Statement ts = resource.getProperty(this.model.getProperty(
+                HermesDictionary.RDF_NS.getNs() + "type"));
+            // set the URI of the ontological class
+            intangible.setCulturalPropertyType(ts.getObject().asResource().getURI());
+
+
             // get label if any through rdfs:label property
-            Resource label = resource.getPropertyResourceValue(this.model.getProperty(
-                HermesDictionary.RDFS_NS.getNs() + "label"
-            ));
+            Statement iLabel = resource.getProperty(this.model.getProperty(
+                HermesDictionary.RDFS_NS.getNs() + "label"));
 
             // set label from associated literal
-            intangible.setLabel(label == null ? resource.getLocalName() : label.asLiteral().getString());
+            intangible.setLabel(iLabel == null ? resource.getLocalName() : iLabel.getObject().asLiteral().getString());
 
             // check resource editor
             Statement sEditor = resource.getProperty(this.model.getProperty(
@@ -603,30 +631,35 @@ public class HaiKnowledgeGraph {
                 actor.setId(editor.getURI());
 
                 // get label
-                Resource aLabel = editor.getPropertyResourceValue(this.model.getProperty(
-                    HermesDictionary.RDFS_NS.getNs() + "label"
-                ));
+                Statement aLabel = editor.getProperty(this.model.getProperty(
+                    HermesDictionary.RDFS_NS.getNs() + "label"));
 
                 // set label
-                actor.setLabel(aLabel == null ? "Unknown" : aLabel.asLiteral().getString());
+                actor.setLabel(aLabel == null ? "Unknown" : aLabel.getObject().asLiteral().getString());
             }
 
 
             // get the intangible
             return intangible;
 
-        } else if (resIt.hasNext()) {
+        } else if (it3.hasNext()) {
 
             // create intangible cultural entity
-            CulturalEntity residual = new ResidualCulturalEntity(detailed);
-            residual.setId(resource.getURI());
+            CulturalEntity residual = new ResidualOrLandscapeArchitecturalCulturalEntity(detailed);
+            residual.setId(resource.getURI() == null ? resource.getId().getLabelString() : resource.getURI());
+
+            // get ontological type
+            Statement ts = resource.getProperty(this.model.getProperty(
+                HermesDictionary.RDF_NS.getNs() + "type"));
+            // set the URI of the ontological class
+            residual.setCulturalPropertyType(ts.getObject().asResource().getURI());
+
             // get label if any through rdfs:label property
-            Resource label = resource.getPropertyResourceValue(this.model.getProperty(
-                HermesDictionary.RDFS_NS.getNs() + "label"
-            ));
+            Statement rLabel = resource.getProperty(this.model.getProperty(
+                HermesDictionary.RDFS_NS.getNs() + "label"));
 
             // set label from associated literal
-            residual.setLabel(label == null ? resource.getLocalName() : label.asLiteral().getString());
+            residual.setLabel(rLabel == null ? resource.getLocalName() : rLabel.getObject().asLiteral().getString());
 
             // check resource editor
             Statement sEditor = resource.getProperty(this.model.getProperty(
@@ -643,22 +676,63 @@ public class HaiKnowledgeGraph {
                 actor.setId(editor.getURI());
 
                 // get label
-                Resource aLabel = editor.getPropertyResourceValue(this.model.getProperty(
-                    HermesDictionary.RDFS_NS.getNs() + "label"
-                ));
+                Statement aLabel = editor.getProperty(this.model.getProperty(
+                    HermesDictionary.RDFS_NS.getNs() + "label"));
 
                 // set label
-                actor.setLabel(aLabel == null ? "Unknown" : aLabel.asLiteral().getString());
+                actor.setLabel(aLabel == null ? "Unknown" : aLabel.getObject().asLiteral().getString());
             }
 
 
             // get the residual
             return residual;
 
-        }else {
+        } else {
 
             // unknown type of cultural entity
             throw new CulturalEntityExtractionException("Unknown type of cultural entity resource:\n\t- resource: " + resource);
         }
+    }
+
+    /**
+     * Create a new resource as instance of the given class (individual) and associate the specified label.
+     * 
+     * Assert also provenance information associating the resource with the editor.
+     * 
+     * @param clazz
+     * @param label
+     * @param editor
+     * @return
+     */
+    public Resource createResource(Resource clazz, String label, Resource editor) {
+
+        // create an individual of the give resource class
+        Resource res = this.model.createIndividual(clazz);
+
+        // assert property
+        res.addProperty(this.model.getProperty(
+            HermesDictionary.RDFS_NS.getNs() + "label"), 
+            label);
+
+        // assert provenance knowledge
+        res.addProperty(this.model.getProperty(
+            HermesDictionary.PROVO.getNs() + "wasAttributedTo"), editor);
+
+        // get the associated resource
+        return res;
+    }
+
+    /**
+     * Create a new resource as instance of the given class (individual).
+     * 
+     * @param clazz
+     * @return
+     */
+    public Resource createResource(Resource clazz) {
+
+        // create an individual of the give resource class
+        Resource res = this.model.createIndividual(clazz);
+        // get the associated resource
+        return res;
     }
 }
