@@ -29,6 +29,7 @@ import it.cnr.istc.hermes.hai.knowledge.HermesDictionary;
 import it.cnr.istc.hermes.hai.knowledge.KnowledgeQuery;
 import it.cnr.istc.hermes.hai.model.*;
 import it.cnr.istc.hermes.hai.model.ex.CulturalEntityExtractionException;
+import it.cnr.istc.hermes.hai.planning.HaiTripPlanner;
 
 /**
  * Hermes AI-based Component - REST API
@@ -54,6 +55,8 @@ public class HaiRestApi implements ErrorController {
 	private PostEntityRequestRepository postEntityRepo;	// mongoDB repo for requested POIs
 
 	private static HaiKnowledgeGraph knowledge; 		// knowledge graph with embedded reasoner
+
+	private static HaiTripPlanner planner;				// planning module to generate trips
 
 	/*
 	 * 
@@ -331,6 +334,22 @@ public class HaiRestApi implements ErrorController {
 		PlannedTrip trip = null;
 		// check found POIs
 		if (!pois.isEmpty()) {
+
+			// create planning engine
+			if (planner == null) {
+				// create trip planner instance
+				planner = new HaiTripPlanner();
+			}
+
+			// generate planning specification from POIs
+			String ddl = planner.generatePlanningModel(new ArrayList<>(pois), request.getDuration());
+			System.out.println("\n" + ddl + "\n");
+
+
+			// generate planning problem from request duration
+			String pdl = planner.generatePlanningProblem(request.getDuration());
+			System.out.println("\n" + pdl + "\n");
+			
 			
 			/*
 			 * TODO -- IMPLEMENT PLANNING PROCESS
