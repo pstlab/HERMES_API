@@ -73,8 +73,13 @@
 
     <owl:ObjectProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#isCorrelatedWith">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
         <rdfs:domain rdf:resource="https://w3id.org/arco/ontology/arco/CulturalProperty"/>
         <rdfs:range rdf:resource="https://w3id.org/arco/ontology/arco/CulturalProperty"/>
+        <rdfs:comment xml:lang="en">Relationship that symmetrically binds two closely related Cultural Properties together.
+The relationship must be supported by the description of the POIs.
+
+For example: The Legend of the Magic Door is closely related to Villa Palombara and the Vittorio Square Garden, as it is linked to those specific places.</rdfs:comment>
         <rdfs:comment>Relazione che lega in modo simmetrico due Cultural Properties strettamente legate tra loro.
 La relazione deve essere supportata dalla descrizione dei POI.
 
@@ -151,6 +156,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility_elderly">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility"/>
+        <rdfs:comment xml:lang="it">Questa proprietà ha sempre un valore booleano (vero/falso) e consente di definire se un determinato POI è accessibile agli anziani.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property always has a boolean value (true/false), it allows to define whether a given POI is accessible to elderly.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -159,6 +166,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility_groups">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility"/>
+        <rdfs:comment xml:lang="it">Questa proprietà ha sempre un valore booleano (vero/falso) e consente di definire se un determinato POI è accessibile ai gruppi.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property always has a boolean value (true/false), it allows to define whether a given POI is accessible to groups.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -167,6 +176,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility_hearing_disability">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility"/>
+        <rdfs:comment xml:lang="en">This property always has a Boolean value (true/false) and allows to define whether a particular POI is accessible to people with hearing disabilities.</rdfs:comment>
+        <rdfs:comment>Questa proprietà ha sempre un valore booleano (vero/falso) e consente di definire se un particolare POI è accessibile alle persone con disabilità uditive.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -175,6 +186,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility_motor_disability">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility"/>
+        <rdfs:comment xml:lang="it">Questa proprietà ha sempre un valore booleano (vero/falso) e consente di definire se un particolare POI è accessibile alle persone con disabilità motorie.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property always has a Boolean value (true/false) and allows to define whether a particular POI is accessible to people with motor disabilities.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -183,6 +196,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility_visual_disability">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#accessibility"/>
+        <rdfs:comment xml:lang="it">Questa proprietà ha sempre un valore booleano (vero/falso) e consente di definire se un determinato POI è accessibile alle persone con disabilità visive.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property always has a Boolean value (true/false) and allows to define whether a given POI is accessible to people with visual impairments.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -199,6 +214,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#opening_hours">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visitability"/>
+        <rdfs:comment xml:lang="it">Questa property descrive gli orari di apertura di un bene culturale.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property describes the opening hours of a cultural property.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -207,7 +224,6 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#phone">
         <rdfs:subPropertyOf rdf:resource="https://w3id.org/arco/ontology/context-description/contacts"/>
-        <ADMS:hasContributor>Silvia</ADMS:hasContributor>
     </owl:DatatypeProperty>
     
 
@@ -216,14 +232,17 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visitability">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_information"/>
-        <rdfs:comment>Questa property descrive la visitabilita&apos; di un bene culturale. Es. Visitabile solo su prenotazione, visitabile solo esternamente etc.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property describes the visitability of a cultural property. E.g. visitable only by reservation, visitable only externally, free access etc.</rdfs:comment>
+        <rdfs:comment>Questa property descrive la visitabilita&apos; di un bene culturale. Es. Visitabile solo su prenotazione, visitabile solo esternamente. ingresso libero etc.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
 
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_information -->
 
-    <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_information"/>
+    <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_information">
+        <rdfs:label>visiting information</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
@@ -231,7 +250,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_price">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_information"/>
-        <rdfs:comment>Questa property descrive il prezzo del biglietto di un bene culturale</rdfs:comment>
+        <rdfs:comment xml:lang="it">Questa property da informazioni circa il prezzo del biglietto di ingresso di un bene culturale.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property gives information about the price of the entrance fee of a cultural property.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -240,7 +260,8 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_time">
         <rdfs:subPropertyOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#visiting_information"/>
-        <rdfs:comment>Questa property descrive il tempo di visita minimo di un bene culturale.</rdfs:comment>
+        <rdfs:comment xml:lang="it">Questa proprietà descrive il tempo minimo di visita di un bene culturale. Il tempo è espresso in minuti, sotto forma di numero decimale.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This property describes the minimum visiting time of a cultural property. The time is expressed in minutes, in the form of a decimal number.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -249,8 +270,15 @@ Es. Domus Aurea Description hasTopic Archeology</rdfs:comment>
 
     <owl:DatatypeProperty rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#website">
         <rdfs:subPropertyOf rdf:resource="https://w3id.org/arco/ontology/context-description/contacts"/>
-        <ADMS:hasContributor>Silvia</ADMS:hasContributor>
     </owl:DatatypeProperty>
+    
+
+
+    <!-- https://w3id.org/arco/ontology/location/lat -->
+
+    <rdf:Description rdf:about="https://w3id.org/arco/ontology/location/lat">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </rdf:Description>
     
 
 
@@ -814,6 +842,8 @@ I complessi monumentali possono avere anche una tendenza verticale: per es. una 
 
     <owl:Class rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Location_Infrastructure">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
+        <rdfs:comment xml:lang="it">Infrastruttura di mobilità che può essere associata a una determinata unità territoriale/contesto topografico.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Mobility infrastructure that can be associated with a given Territorial Unit/Topographical Context.</rdfs:comment>
         <rdfs:label>Location Infrastructure</rdfs:label>
     </owl:Class>
     
@@ -1895,6 +1925,7 @@ Rispetto al patrimonio immateriale possiamo annoverare come “sparito” un mes
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#AcquarioRomano">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuraServiane"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#AcquarioRomanoDescription"/>
@@ -1934,6 +1965,7 @@ Entrando, si accede nell&apos;atrio dagli ornamenti &quot;alla pompeiana&quot;, 
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#AnfiteatroCastrense">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSantaCroceGerusalemme"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#AnfiteatroCastrenseDescription"/>
@@ -1944,7 +1976,7 @@ Entrando, si accede nell&apos;atrio dagli ornamenti &quot;alla pompeiana&quot;, 
         <context-description:address>Via Nola, 4-10</context-description:address>
         <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.88778505553145</location:lat>
         <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.515050155822085</location:long>
-        <rdfs:comment>Anfiteatro Castrense</rdfs:comment>
+        <rdfs:label>Anfiteatro Castrense</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1954,6 +1986,7 @@ Entrando, si accede nell&apos;atrio dagli ornamenti &quot;alla pompeiana&quot;, 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#AnfiteatroCastrenseDescription">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
         <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Anfiteatro_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#History_const"/>
         <rdfs:comment>Di fianco alla Basilica di Santa Croce in Gerusalemme, nel Complesso archeologico del Sessorio, le Mura Aureliane raggiungono e inglobano i resti dell&apos;Anfiteatro Castrense, uno dei monumenti romani più importanti e imponenti.
 Con tutta probabilità fu costruito dall&apos;imperatore Eliogabalo (218-222) come anfiteatro di corte annesso alla dimora imperiale (con “castrum” ci si riferiva, molto probabilmente, alle residenze imperiali, come citato nei cataloghi regionari del la V Regio).
 Originariamente di forma ellittica, l’anfiteatro misura 88 metri sull&apos;asse maggiore e 75,80 su quello minore. Un corridoio coperto lo collegava con il Circo Variano: se ne vedono i resti, insieme a quelli del circo, nel retro della basilica. All’interno, ora occupato dagli orti del convento di Santa Croce, vi erano i gradini della cavea. Ambienti sotterranei, rivelati da scavi in epoche passate, erano presenti sotto l’arena. Nel costruire le Mura Aureliane, l’anfiteatro fu incluso nel percorso della cinta muraria e il piano superiore fu fortificato.
@@ -2107,6 +2140,7 @@ Fonte: https://www.romanoimpero.com/2022/08/sotto-s-silvestro-e-martino-ai-monti
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
         <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ClivusSuburanus"/>
         <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaQuinquatriMinori"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaSGiovanniEsquilino"/>
         <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuraServiane"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
@@ -2264,12 +2298,57 @@ Fonte: https://www.sovraintendenzaroma.it/i_luoghi/roma_antica/monumenti/auditor
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaPapaleSantaMariaMaggiore -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaPapaleSantaMariaMaggiore">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaMadonnaNeve"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaPapaleSantaMariaMaggioreDescription"/>
+        <hermes:accessibility_elderly rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_elderly>
+        <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
+        <hermes:accessibility_hearing_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_hearing_disability>
+        <hermes:accessibility_motor_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_motor_disability>
+        <hermes:visitability>Ingresso libero</hermes:visitability>
+        <hermes:visiting_price>Gratis</hermes:visiting_price>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">30</hermes:visiting_time>
+        <context-description:address>P.za di Santa Maria Maggiore</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.898549485280256</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.498214586118086</location:long>
+        <rdfs:label>Basilica Papale di Santa Maria Maggiore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaPapaleSantaMariaMaggioreDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaPapaleSantaMariaMaggioreDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ArteMusiva_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ContemporaryRitual_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FondazionePaleocristiana_const"/>
+        <rdfs:comment>Una delle quattro basiliche papali di Roma, la Basilica di Santa Maria Maggiore sorge sulla sommità del colle Esquilino ed è la sola ad aver conservato la primitiva struttura paleocristiana, sia pure arricchita da aggiunte successive.
+La leggenda vuole che il ricco patrizio romano Giovanni e sua moglie, non avendo figli, decidessero di dedicare una chiesa alla Vergine Maria, apparsa loro in sogno una una notte di agosto del 352 d.C.. Nel sogno, la Madonna li informò che un miracolo avrebbe indicato loro il luogo su cui costruire la chiesa.
+Anche Papa Liberio fece lo stesso sogno e, il giorno seguente, recatosi sull’Esquilino, lo trovò coperto di neve. Il papa stesso tracciò il perimetro dell’edificio e la chiesa fu costruita a spese dei due coniugi.
+Ancora oggi, ogni anno, il 5 agosto viene rievocato il miracolo della neve con un’apposita celebrazione durante la quale, dalla sommità della basilica, vengono liberati in aria dei petali bianchi che producono un effetto davvero suggestivo e da non perdere.
+Nella basilica potete ammirare il primo presepe inanimato della storia, La Natività di Arnolfo di Cambio, geniale artista toscano e noto scultore perfezionatosi alla bottega di Nicola Pisano.
+Profonde trasformazioni della basilica, che fino ad allora aveva conservato il suo aspetto sostanzialmente medievale, furono avviate tra la fine del XVI e l’inizio del XVII secolo da Sisto V e da Paolo V, che eressero le due grandi cappelle laterali, dette appunto Sistina e Paolina, e il palazzo a destra della facciata.
+Tra il 1670 ed il 1676, Carlo Rainaldi ridisegnò l’abside nelle forme attuali. All’interno, si segnalano importanti opere d’arte. Sui muri della navata centrale, al di sopra della trabeazione, sono visibili riquadri a mosaico risalenti al V secolo.
+Il soffitto risale al tempo di Alessandro VI Borgia (1492-1503) e, secondo la tradizione, venne dorato col primo carico di oro americano, dono di Isabella di Spagna.
+L’arco di trionfo è decorato da mosaici con Storie dell’infanzia di Gesù del periodo di Sisto III. Nel catino absidale, il bellissimo mosaico fu eseguito, e firmato, da Iacopo Torriti, alla fine del XIII secolo. Fonte: https://www.turismoroma.it/it/luoghi/basilica-di-santa-maria-maggiore</rdfs:comment>
+        <rdfs:label>Basilica Papale di Santa Maria Maggiore Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSMartinoSSilvestroMonti -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSMartinoSSilvestroMonti">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
         <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ClivusSuburanus"/>
         <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#IpogeoLanza"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSanMartino"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneMonti"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSMartinoSSilvestroMontiDescription"/>
@@ -2360,7 +2439,9 @@ https://www.parrocchiasanmartinoaimonti.it/titolo-equizio/</rdfs:comment>
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSantaCroceGerusalemme -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSantaCroceGerusalemme">
-        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ComplessoMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#AnfiteatroCastrense"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CancelloKounellis"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSantaCroceGerusalemmeDescription"/>
@@ -2450,6 +2531,46 @@ https://www.vaticannews.va/it/chiesa/news/2021-03/la-basilica-di-santa-prassede-
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSotterraneaPortaMaggiore -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSotterraneaPortaMaggiore">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoNeopitagorismo"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#DomusAurea"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMaggiore"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSotterraneaPortaMaggioreDescription"/>
+        <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
+        <hermes:visitability>Il sito è accessibile solo con visita guidata con prenotazione obbligatoria www.coopculture.it</hermes:visitability>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60</hermes:visiting_time>
+        <context-description:address>piazzale Labicano, 2</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.89178405736832</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.516513324606512</location:long>
+        <rdfs:label>Basilica Sotterranea di Porta Maggiore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSotterraneaPortaMaggioreDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSotterraneaPortaMaggioreDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Archeology_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ArteMusiva_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RomanArchitecture_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RomanReligiousPlace_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UrbanisticaRomana_const"/>
+        <rdfs:comment>La basilica, riportata alla luce casualmente il 23 aprile 1917 in seguito ad un cedimento del terreno lungo la linea ferroviaria Roma-Cassino, si trova a circa 9 metri sotto il livello dell’attuale via Prenestina, subito fuori l’odierna Porta Maggiore, punto di convergenza del più importante gruppo di acquedotti della Roma imperiale.
+Per evitare ulteriori danneggiamenti derivanti dalle vibrazioni dei treni e dalle infiltrazioni d’acqua, nel 1951 venne costruito un contenitore  di cemento armato con una intercapedine per racchiudere completamente le strutture antiche.
+Il complesso della Basilica sotterranea di Porta Maggiore si compone di un corridoio, di un vestibolo e di una sala principale di tipo basilicale. Il corridoio costituiva in origine l’accesso dall’antica via Prenestina: dal piano stradale una lunga galleria coperta con volta a botte scendeva con una forte pendenza lungo il lato settentrionale della basilica per poi piegare ad angolo retto e raccordarsi con il vestibolo. Oggi del corridoio si conserva solo l’ultimo tratto di raccordo al vestibolo. Questo è un piccolo ambiente a pianta quadrangolare (m 3,60 x 3,60) con volta a padiglione traforata da un lucernario che riproduce la forma dell’aula basilicale. La sala basilicale (m 12 x 9 per complessivi mq 108) è un’aula rettangolare suddivisa da sei pilastri in tre navate coperte con volte a botte. La navata centrale, più ampia rispetto alle navate laterali, presenta sul fondo un’abside semicircolare. I pavimenti sono a mosaico bianco e nero, mentre sulle pareti e sulle volte predomina il colore bianco della decorazione a stucco.
+Nel catino dell’abside è raffigurata Saffo nell’atto di lanciarsi dalla rupe di Leucade. Le rappresentazioni figurate della sala riconducono alla mitologia classica (come per esempio Ganimede rapito da un genio alato, il ratto di una delle figlie di Leucippo), al rituale mistico o a scenette di vita quotidiana. Nel tessuto decorativo si moltiplicano le figure femminili di offerenti e le immagini di oggetti come vasi, candelabri, strumenti musicali; sulle pareti si stendono grandi pannelli con raffigurazioni paesaggistiche stilizzate. Nel vestibolo l’apparato decorativo è caratterizzato dall’uso della policromia sulla volta, ripartita in quadretti figurati, mentre sulle pareti si ripetono i temi paesaggistici con presenza di uccelli e ghirlande floreali. Le indagini effettuate durante i restauri hanno rivelato un complesso sistema di costruzione dell’edificio per fasi successive: scavo, riempimento con getti di cementizio di calce e pozzolana con blocchetti di selce e svuotamento delle terre.
+La basilica è stata interpretata come luogo di culto o edificio funerario e collegata alle vaste proprietà della Gens Statilia, a cui appartiene anche il colombario ancora oggi visibile a circa duecento metri di distanza. Al di là delle ipotesi sulla funzione dell’edificio, l’eleganza e l’organicità del tessuto decorativo fanno della basilica un’opera d’arte unitaria databile nei primi decenni del I secolo d.C., sia per la scelta dei soggetti che per lo stile della realizzazione, i cui confronti più stringenti si riscontrano - sempre a Roma - nei coevi esempi forniti dal già citato colombario degli Statilii, dal criptoportico sul Palatino, dalla sala dalla Volta Dorata della Domus Aurea. Fonte: https://www.soprintendenzaspecialeroma.it/schede/basilica-sotterranea-di-porta-maggiore_2971/</rdfs:comment>
+        <rdfs:label>Basilica Sotterranea di Porta Maggiore Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Bernini_const -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Bernini_const">
@@ -2464,8 +2585,9 @@ https://www.vaticannews.va/it/chiesa/news/2021-03/la-basilica-di-santa-prassede-
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CancelloKounellis">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSantaCroceGerusalemme"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
-        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSantaCroceGerusalemme"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CancelloKounellisDescription"/>
         <hermes:accessibility_elderly rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_elderly>
         <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
@@ -2489,6 +2611,29 @@ https://www.vaticannews.va/it/chiesa/news/2021-03/la-basilica-di-santa-prassede-
         <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Nature_const"/>
         <rdfs:comment>Sipario è il nome dato al cancello dell’orto monastico della Basilica di Santa Croce in Gerusalemme realizzato dall’artista greco Jannis Kounellis. L’opera è stata realizzata su incarico dell’associazione Amici di Santa Croce in Gerusalemme, che ha promosso nel 2004 il restauro dell’orto su progetto dell’architetto Paolo Pejrone. L’opera è costituita da un filo ritorto in ferro battuto decorato da pietre trasparenti colorate in vetro o in quarzo, allusione alla ricchezza dei frutti presenti nel giardino. Il cancello d’ingresso si apre come un sipario verso l’orto e anche quando chiuso lascia intravedere ai passanti, attraverso il groviglio di linee, la natura ordinata dell’orto, racchiusa dalle mura Aureliane. Fonte: luoghidelcontemporaneo.cultura.gov.it</rdfs:comment>
         <rdfs:label>Cancello di Kounellis Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CapodannoCinese -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CapodannoCinese">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SocialEvent"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#GiardinodiPiazzaVittorio"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CapodannoCineseDescription"/>
+        <rdfs:label>Festa del Capodanno Cinese</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CapodannoCineseDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CapodannoCineseDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SocialExperience_const"/>
+        <rdfs:comment>La festa del Capodanno cinese di Roma si svolge nei Giardini Nicola Calipari di piazza Vittorio Emanuele II, nel rione Esquilino, tra arte, tradizioni, spettacoli e numerosi gazebo con autentiche delizie culinarie cinesi. L&apos;apice delle celebrazioni e’ costituito dalla tradizionale parata che attraversa viale Manzoni e via Principe Eugenio, per concludersi nuovamente in piazza Vittorio. Fonte: https://www.comune.roma.it/web/it/notizia.page?contentId=NWS1152197</rdfs:comment>
+        <rdfs:label>Festa del Capodanno Cinese Description</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -3058,6 +3203,7 @@ L&apos;interno, originariamente a tre navate divise da sei colonne antiche per l
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSVitoSModesto">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
         <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ArcoGallieno"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaSGiovanniEsquilino"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSVitoSModestoDescription"/>
@@ -3129,6 +3275,59 @@ Nella parete di destra si trovano: un cippo romano con iscrizione, che la tradiz
         <rdfs:comment>La Chiesa risale all’XI secolo, come riportato su un’antica epigrafe nella quale si ricordava la dedica di papa Clemente II alla chiesa allora denominata “S.Andrea”. La chiesa, distrutta completamente dai lanzichenecchi durante il Sacco di Roma del 1527, fu ricostruita durante il pontificato di Urbano VIII tra il 1630 ed il 1635 su progetto di Gaspare de Vecchi e collegata con l’adiacente Collegio dei Neofiti. 
 Rinnovata dalle fondamenta e ricondotta ad una forma più elegante nell’anno 1762, fu poi restaurata nel 1904. Dal 2013, la chiesa è stata affidata alla comunità georgiana di Roma, ed è sede della parrocchia di Sant&apos;Andrea Apostolo della diocesi dell&apos;Europa Occidentale del Patriarcato Ortodosso Autocefale Georgiano. Fonte: Touring club italia</rdfs:comment>
         <rdfs:label>Chiesa di S. Salvatore ai Monti Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSantaBibiana -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSantaBibiana">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSantaBibiana"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSantaBibianaDescription"/>
+        <hermes:accessibility_elderly rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_elderly>
+        <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
+        <hermes:accessibility_motor_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_motor_disability>
+        <hermes:opening_hours>Dal Lunedì al Sabato: 7:15 – 8:00 e 17:00-19:30, Domenica: 8.00 -12:00</hermes:opening_hours>
+        <hermes:visitability>ingresso libero</hermes:visitability>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">20</hermes:visiting_time>
+        <context-description:address>Via Giovanni Giolitti, 154</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.90076365075464</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.508532425965916</location:long>
+        <rdfs:label>Chiesa di Santa Bibiana</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSantaBibianaDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSantaBibianaDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ArchitetturaBarocca_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Bernini_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#StoriesAndLegends_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#religious_actor_const"/>
+        <rdfs:comment>Situata nei pressi della Stazione Termini, la chiesa di Santa Bibiana ha origini antichissime risalenti al 468, secondo alcune fonti che ritengono anche verace che sia stata edificata sulle spoglie di 11.266 martiri. Secondo la leggenda, invece, la chiesa fu edificata nel 363 nel luogo dove visse Santa Bibiana e fu sepolta dopo essere stata flagellata a morte, il 2 dicembre 362, durante le persecuzioni avvenute sotto il regno dell&apos;imperatore Giuliano detto il Apostata, per non voler abiurare la fede cristiana. Le sue spoglie riposano sotto l&apos;altare maggiore protette in una preziosa urna in alabastro risalente all&apos;epoca costantiniana.
+
+Nel corso dei secoli la chiesa subì diversi rimaneggiamenti, ma fu completamente rinnovata tra il 1624 e il 1625, su commissione di papa Urbano VIII, da un giovane Gian Lorenzo Bernini che con questo restauro si cimentò nella sua prima opera architettonica in assoluto.
+
+Pur apportando modifiche al tema barocco, il grande artista lavorò con il massimo rispetto per la struttura dell&apos;antica chiesa, senza compromettere l&apos;armonia delle linee e l&apos;accuratezza umile ed essenziale. Lo arricchì di una nuova facciata e di un nuovo portico, creò due cappellette in fondo alle navate laterali e sostituì l&apos;abside originaria con una cappella maggiore che adornò di stucchi.
+
+Ai lati dell&apos;ingresso centrale, preceduto da un portico con tre aperture ad arco e scandito da pilastri ionici con capitelli e basi in travertino, si trovano due iscrizioni, una in caratteri gotici di epoca medievale (XIII secolo) e una in latino che richiamano il convento e il cimitero dove riposano &quot;undicimiladuecentosessantasei corpi de Martiri&quot;.
+
+Varcando la soglia della chiesa, a sinistra, si trova il tronco della colonna a cui la santa fu legata durante il suo martirio. Protetta da una grata in bronzo dorato realizzata su disegno del Bernini, sotto la quale si legge la seguente didascalia: &quot;Legata a questa colonna, la invitta martire Santa Bibiana, con funi di piombo, fu crudelmente flagellata&quot;, la colonna è parzialmente consumata. I devoti di Santa Bibiana erano soliti raschiarlo per raccogliere la polvere che, disciolta nell&apos;acqua del pozzo del vicino giardino e mescolata all&apos;erba che cresceva sul terreno intrisa del suo sangue, produceva una bevanda dal potere altamente taumaturgico.
+
+L&apos;interno è diviso in tre navate, separate l&apos;una dall&apos;altra da una doppia fila di antiche colonne di granito rosso-grigio e marmo bianco su cui sono posti capitelli in stile composito e corinzio.
+
+Sull&apos;altare maggiore Bernini pose la statua in marmo bianco di Santa Bibiana, che è anche la prima figura completamente vestita scolpita dall&apos;artista.
+Le pareti sono decorate da affreschi di Agostino Ciampelli, eseguiti tra il 1624 e il 1625, raffiguranti angeli musicanti, affacciati o seduti su una balaustra riccamente decorata. La decorazione prosegue in basso e presenta fregi costituiti da strumenti di tortura, realizzati dallo stesso Ciampelli.
+
+Contemporanei sono gli affreschi di Pietro da Cortona, realizzati negli stessi anni di quelli del Ciampelli. Questi rappresentano il processo di condanna e la morte di Demetria, sorella di Bibiana; la matrona Rufina che cerca di indurre Bibiana in tentazione; la flagellazione del Santo.
+
+Altri lavori di sistemazione della chiesa furono eseguiti nei secoli successivi, ma nel rispetto del restauro operato da Gian Lorenzo Bernini. Fonte: https://www.turismoroma.it/it/luoghi/chiesa-di-santa-bibiana</rdfs:comment>
+        <rdfs:label>Chiesa di Santa Bibiana Description</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -3426,6 +3625,30 @@ Fonte: https://www.sovraintendenzaroma.it/i_luoghi/ville_e_parchi_storici/passeg
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CoroPiazzaVittorio -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CoroPiazzaVittorio">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ArtisticMovement"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#GiardinodiPiazzaVittorio"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CoroPiazzaVittorioDescription"/>
+        <rdfs:label>Coro di piazza Vittorio</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CoroPiazzaVittorioDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CoroPiazzaVittorioDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Music_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Social_const"/>
+        <rdfs:comment>Il Coro di Piazza Vittorio è nato nel 2004 per iniziativa del maestro Antonio Vignera come laboratorio polifonico aperto a tutti, con una logica di forte coinvolgimento e apertura in un’area, quella di piazza Vittorio e più in generale dell’Esquilino, caratterizzata da una forte presenza multietnica. Il coro è accolto sotto l’egida giuridica dell’Associazione Culturale Panharmonikon Orchestra. Con il maestro Giuseppe Puopolo, che lo dirige dal 2010, si è rafforzata la vocazione partecipativa e di coinvolgimento. Il Coro ha avuto infatti una collaborazione pluriennale con il King Bible Choir di Rebibbia, organizzando numerosi concerti con i detenuti all’interno della casa circondariale, e con il Coro di Villa Lais presso il Centro Diurno Villa Lais ASL Roma C, oltre che con il Piccolo Coro di Piazza Vittorio, costola vivaio della compagine composto da bambini delle classi elementari. Il repertorio spazia dai classici della musica corale, come Vivaldi, Mozart o Fauré, fino alla Little Jazz Mass di Chilcott, alle canzoni dei Beatles o a quelle del Quartetto Cetra, senza trascurare gospel e brani musicali tradizionali di altre culture. La differenziazione e ampiezza del repertorio favoriscono l’incontro con un pubblico eterogeneo nei diversi spettacoli organizzati sia in luoghi canonici, come le sale da concerto o le chiese, che in contesti diversi, come centri diurni, carceri speciali, mercati. Il Coro si è esibito, alle Terme di Diocleziano, all’Auditorium del Mecenate, alla Sala Nervi e in Sala Clementina con papa Francesco e in diverse chiese sia a Roma che a Napoli. Fonte: https://www.ilcorodipiazzavittorio.it/chi-siamo/</rdfs:comment>
+        <rdfs:label>Coro di piazza Vittorio Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CriptaSVito -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CriptaSVito">
@@ -3510,6 +3733,30 @@ Fonte: https://www.treccani.it/enciclopedia/arianesimo_%28Dizionario-di-Storia%2
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoDeiSanti_const">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoSantiRitual"/>
         <rdfs:label>Culto dei Santi</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoNeopitagorismo -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoNeopitagorismo">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Rituals"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSotterraneaPortaMaggiore"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoNeopitagorismoDescription"/>
+        <rdfs:label>Culto misterico del Neopitagorismo</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoNeopitagorismoDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CultoNeopitagorismoDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RomanRitual_const"/>
+        <rdfs:comment>Si ipotizza che la basilica fosse un santuario per il culto neopitagorico, in onore quindi del pensiero di Pitagora, i cui adepti – aderendo a un culto misterico e quindi segreto – avrebbero qui svolto riti magici incentrati sulla trasmigrazione e sul reintegro delle anime. Tuttavia, questa ipotesi apre molte contestazioni, soprattutto perché il neopitagorismo era probabilmente praticato solo fino al secolo precedente, non essendo più menzionato nel I secolo d.C. Il dibattito quindi è ancora aperto: l’augurio è che grazie alla campagna di restauro tuttora in corso, sia possibile scoprire qualche nuova e fondamentale informazione.
+Fonte: Salvatore Aurigemma, La basilica sotterranea neopitagorica di Porta Maggiore in Roma. Guida, Roma Istituto Poligrafico e Zecca dello Stato 1975</rdfs:comment>
+        <rdfs:label>Culto misterico del Neopitagorismo Description</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -3705,6 +3952,30 @@ La facciata, preceduta da una doppia scalinata, presenta belle cornici barocche 
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaMadonnaNeve -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaMadonnaNeve">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Festivity"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaPapaleSantaMariaMaggiore"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaMadonnaNeveDescription"/>
+        <rdfs:label>Festa della Madonna della Neve</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaMadonnaNeveDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaMadonnaNeveDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ContemporaryRitual_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#StoriesAndLegends_const"/>
+        <rdfs:comment>Ogni anno, il 5 agosto, si svolge una festa per celebrare la Madonna della Neve e una messa solenne per omaggiare la Vergine Maria. Una ricorrenza, quella del miracolo della neve, che ogni anno viene festeggiata e che richiama turisti da ogni parte del mondo. Nella piazza antistante la Basilica viene organizzato uno spettacolo di suoni e luci, dopodiché viene riprodotta una nevicata artificiale che richiama quella che si sarebbe verificata nel 358 d.C. Era il 5 agosto del 358 d.C. quando Roma si svegliò sotto una coltre di neve bianca. Un fatto insolito, che ancora oggi viene narrato, di anno in anno, di generazione in generazione, e che ha dato vita a quello che è passato alla storia come ‘il miracolo della neve‘. Ma com&apos;è nato questo mito? Secondo la leggenda, nella notte del 5 agosto del 358 d.C. la Vergine Maria apparve in sogno all&apos;allora Papa Liberio e al patrizio Giovanni, chiedendo di costruire una chiesa nel luogo che avrebbe indicato. Al loro risveglio, il Papa e il patrizio trovarono l&apos;Esquilino ricoperto di neve, in pieno agosto. Quell&apos;evento passò alla storia come ‘il miracolo della neve&apos;, e nel luogo dove nevicò venne costruita la Basilica di Santa Maria Maggiore, dedicata alla Madonna.Fonte: https://www.turismoroma.it/it/eventi/rievocazione-storica-del-miracolo-della-neve-santa-maria-maggiore-3</rdfs:comment>
+        <rdfs:label>Festa della Madonna della Neve Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaQuinquatriMinori -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaQuinquatriMinori">
@@ -3755,6 +4026,31 @@ La tradizione antica lega alla Porta Esquilina l&apos;origine della festa dei Qu
         <rdfs:comment>Si tratta della tradizionale benedizione degli animali in occasione della festa di sant’Antonio Abate, a Sant’Eusebio all’Esquilino. Una tradizione che va avanti dal 1437 e che vede arrivare al Rione Esquilino centinaia di fedeli accompagnati dai loro amici a quattro zampe.
 Fonte: https://www.diocesidiroma.it/a-santeusebio-la-festa-di-santantonio-abate/</rdfs:comment>
         <rdfs:label>Festa di S. Antonio Abate Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaSGiovanniEsquilino -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaSGiovanniEsquilino">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ReligiusEvent"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ArcoGallieno"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSVitoSModesto"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaSGiovanniEsquilinoDescription"/>
+        <rdfs:label>Festa di S. Giovanni all&apos;Esquilino</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaSGiovanniEsquilinoDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#FestaSGiovanniEsquilinoDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ReligiousFestivity_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SocialExperience_const"/>
+        <rdfs:comment>Una delle feste popolari rionali più antiche di Roma storicamente più amate e più partecipate, la Festa di San Giovanni. In genere la location si alterna tra l’antico Arco di Gallieno e la Chiesa dei Santi Vito e Modesto. La festa in genere si celebra nel weekend tra il 22 e il 24 giugno. Fonte: https://blog-esquilino.com/2019/06/22/22-giugno-2019-festa-di-san-giovanni-allesquilino-presso-la-chiesa-di-san-vito/</rdfs:comment>
+        <rdfs:label>Festa di S. Giovanni all&apos;Esquilino Description</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -3860,6 +4156,9 @@ Fonte: https://www.repubblica.it/il-gusto/2023/07/18/news/cucina_dellantica_roma
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#GiardinodiPiazzaVittorio">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ComplessoMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CapodannoCinese"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CoroPiazzaVittorio"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NagarKirtan"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#GiardinodiPiazzaVittorioDescription"/>
@@ -4084,6 +4383,33 @@ La leggenda vuole che un viaggiatore, probabilmente il medico alchimista Frances
 Questa leggenda è attualmente superata e l’iscrizione viene attribuita al codice vaticano detto La Bugia. Rime del Marchese Massimiliano Palombara. Luglio MDCLX (manoscritto Reginense Lat. 1521 della Biblioteca Apostolica Vaticana) del 1655, realizzato dallo stesso marchese Palombara.
 Fonte: https://www.sovraintendenzaroma.it/content/porta-magica</rdfs:comment>
         <rdfs:label>Leggenda della Porta Magica Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#LeggendaVicusSceleratus -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#LeggendaVicusSceleratus">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Legend"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ScalinataBorgia"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#LeggendaVicusSceleratusDescription"/>
+        <rdfs:label>Leggenda del Vicus Sceleratus</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#LeggendaVicusSceleratusDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#LeggendaVicusSceleratusDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#History_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#StoriesAndLegends_const"/>
+        <rdfs:comment>La leggenda del Vicus Sceleratus risale al 535 a.C., l’epoca degli ultimi tre re di Roma di origine etrusca.  La storia è riportata da Tito Livio nella sua opera monumentale “Ab urbe condita” e narra proprio di un amore “scellerato”, che battezzerà per la prima volta il vicolo.
+Servio Tullio, sovrano di Roma e successore di Tarquinio Prisco, ebbe due figlie, Tullia minor e Tullia maior, due fanciulle con caratteri decisamente opposti: la prima dall’animo turbolento, la seconda dall’indole buona. Il re decise di dare in sposa le due giovani ai figli del suo predecessore, Arunte e Lucio Tarquinio (in seguito Tarquinio il Superbo). Anche i due fratelli avevano personalità diverse tra loro. Peccato che le coppie furono mal assortite perché il pacifico Arunte finì con la Tullia audace e il prepotente Lucio con la Tullia mite. Per loro la legge degli opposti che si attraggono non funzionò tant’è che Lucio e la Minore decisero di uccidere i rispettivi coniugi per unirsi in matrimonio.
+Non contenta, Tullia istigò suo marito a compiere un secondo omicidio: ai danni di suo padre e sovrano di Roma, Servio Tullio. Tarquinio fece presto a sbarazzarsi del re, scaraventandolo sulle gradinate della curia (luogo che in seguito verrà rinominato Vicus Sceleratus). Inutili i tentativi di fuga di Tullio che venne brutalmente assassinato dai sicari mandati proprio da sua figlia. E non ancora soddisfatta, quella Tullia “scellerata” infierì sul cadavere di suo padre ordinando al proprio cocchiere di passarci sopra.
+Fonte: https://www.fanpage.it/roma/a-roma-ce-un-vicolo-scellerato-luogo-di-omicidi-e-segreti-dallantica-roma-ai-borgia/</rdfs:comment>
+        <rdfs:label>Leggenda del Vicus Sceleratus Description</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -4353,6 +4679,45 @@ Il complesso monumentale, che si propone di offrire spazi espositivi, servizi cu
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoNazionaleRomano -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoNazionaleRomano">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoNazionaleRomanoDescription"/>
+        <hermes:accessibility_elderly rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_elderly>
+        <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
+        <hermes:accessibility_hearing_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_hearing_disability>
+        <hermes:accessibility_motor_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_motor_disability>
+        <hermes:accessibility_visual_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_visual_disability>
+        <hermes:opening_hours>Dal martedì alla domenica
+9.30 – 19.00
+la biglietteria chiude alle 18.00
+Chiuso il lunedì</hermes:opening_hours>
+        <hermes:visitability>Ingresso libero o su prenotazione</hermes:visitability>
+        <hermes:visiting_price>Intero € 8, Ridotto € 2, Gratuito la prima domenica di ogni mese e nelle aperture straordinarie: https://museonazionaleromano.beniculturali.it/orari-e-biglietti/#</hermes:visiting_price>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60</hermes:visiting_time>
+        <context-description:address>Largo di Villa Peretti, 1</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.9016145061877</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.498033057626024</location:long>
+        <rdfs:label>Museo Nazionale Romano</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoNazionaleRomanoDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoNazionaleRomanoDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Archeology_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Art_const"/>
+        <rdfs:comment>Istituito nel 1889 per ospitare le antichità di Roma, il Museo Nazionale Romano conserva la raccolta archeologica più importante del mondo. Attualmente la collezione è articolata in diverse sedi espositive, che raccolgono i materiali divisi per contesti di provenienza, natura e collezioni: Palazzo Massimo alle Terme, Palazzo Altemps, Crypta Balbi e Terme di Diocleziano.Tra le collezioni più prestigiose possiamo citare la collezione dell&apos;ex Museo Kircheriano, la collezione Gnecchi e la collezione medievale e moderna di Vittorio Emanuele III di Savoia. In questa sezione si trovano anche la collezione Savoia e la Sezione di Oreficeria, sezione di gioielli e gemme, quasi tutti oggetti funerari. Il Museo ospita capolavori di scultura classica, principalmente risalenti alla tarda repubblica e alla prima epoca imperiale, che riflettono l&apos;influenza della cultura greco-ellenistica sugli artisti di Roma. Tra le più significative l&apos;Augusto come Pontefice Massimo da via Labicana, la Fanciulla di Anzio, copie romane di opere greche, come il famoso Discobolo Lancellotti, l&apos;Ermafrodito dormiente, la Venere che sta per fare il bagno di Doidalsas, e l&apos;Apollo del Tevere - una copia di un&apos;opera originale del V secolo a.C., probabilmente della bottega di Fidia. Al secondo piano sono esposti alcuni tra i più noti apparati decorativi rinvenuti in complessi di Roma, caratterizzati da particolare lusso ed eleganza, tra cui spiccano le pitture di alcuni ambienti della Villa di Livia a Prima Porta e le decorazioni della Villa della Farnesina, probabile possesso imperiale, della quale sono ricostruiti quattro ambienti dei nove conservati. Si tratta di esempi particolarmente raffinati, databili intorno al 20 a.C.; sono visibili anche alcuni esempi di mosaici pavimentali di epoca repubblicana, in bianco e nero con quadretti centrali policromi e pavimenti con raffigurazioni più articolate di epoca imperiale. I mosaici esposti riflettono temi e stili di un periodo che va dal I secolo a.C. al IV secolo d.C. Le opere provengono da varie zone della città. Una notevole opera di intarsio del IV secolo d.C. rappresenta la testa del Dio Sole in marmo cipollino. Degni di nota sono anche gli intarsi della Basilica di Giunio Basso. Fonte: https://turismoroma.it/it/luoghi/museo-nazionale-romano-palazzo-massimo-alle-terme</rdfs:comment>
+        <rdfs:label>Museo Nazionale Romano Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoNazionaleStrumentiMusicali -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoNazionaleStrumentiMusicali">
@@ -4393,6 +4758,7 @@ Gratuito (under 18, prima domenica del mese)</hermes:visiting_price>
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoStoricoFisica">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ViaPanisperna"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ViaPanisperna"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#MuseoStoricoFisicaDescription"/>
@@ -4435,6 +4801,30 @@ Il percorso del museo è accompagnato dal confronto con i ricercatori e le ricer
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NagarKirtan -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NagarKirtan">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ReligiusEvent"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#GiardinodiPiazzaVittorio"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NagarKirtanDescription"/>
+        <rdfs:label>Festa del Nagar Kirtan</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NagarKirtanDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NagarKirtanDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ReligiousFestivity_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SocialExperience_const"/>
+        <rdfs:comment>Nagar Kirtan (in Punjabi: ਨਗਰ ਕੀਰਤਨ) è una celebrazione tradizionale Sikh che si svolge solitamente nel mese di Visakhi, il mese del raccolto nella regione del Punjab.a comunità Sikh celebra la ricorrenza riunendosi a Roma il 24 aprile nella Piazza Vittorio Emanuele, nel cuore del quartiere Esquilino; dopo il pasto del mattino, i Panj Piare, i 5 amati dal guru, guidano la processione attraverso il quartiere seguiti dal Guru Granth Sahib (Punjabi (Gurmukhi): ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ) il più importante scritto religioso della religione Sikh) accompagnati da canti sacri ed esibizioni di arti marziali tradizionali. La processione si conclude nel pomeriggio con le Ardas (preghiere) e la distribuzione di cibo per i fedeli. Fonte: https://www.piuculture.it/2016/04/nagar-kirtan-roma-comunita-sikh/</rdfs:comment>
+        <rdfs:label>Festa del Nagar Kirtan Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Nature_const -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Nature_const">
@@ -4464,6 +4854,41 @@ Il termine ninfeo è usato convenzionalmente dagli archeologi per edifici assai 
  Le tipologie di fontane monumentali sono numerosissime, tra le principali si ricordano: - fontane a camera o con fondo absidato, che rappresentano l’evoluzione delle fonti presenti nelle grotte (specus); - fontane del tipo lacus, il cui bacino di captazione scoperto rappresenta l’elemento costitutivo essenziale, se non l’unico; - edifici a pianta centrata (quadrangolari o circolari), in genere monopteri; - edifici semicircolari, inquadrati o no lungo il loro perimetro da gradini o scalee (possono essere ad una sola o a più esedre); - edifici con facciata rettilinea decorata come una frons scenae ed, eventualmente, gomiti laterali 
 Fonte: http://www.iccd.beniculturali.it/getFile.php?id=7392</rdfs:comment>
         <rdfs:label>Ninfeo / Fontana monumentale</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NuovoMercatoEsquilino -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NuovoMercatoEsquilino">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#GiardinodiPiazzaVittorio"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NuovoMercatoEsquilinoDescription"/>
+        <hermes:accessibility_elderly rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_elderly>
+        <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
+        <hermes:accessibility_hearing_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_hearing_disability>
+        <hermes:accessibility_motor_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_motor_disability>
+        <hermes:accessibility_visual_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_visual_disability>
+        <hermes:opening_hours>Dal Lunedì al Sabato: 7:00 – 15:00</hermes:opening_hours>
+        <hermes:visitability>ingresso libero</hermes:visitability>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">30</hermes:visiting_time>
+        <context-description:address>via Principe Amedeo 184</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.89605927502448</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.50696305767236</location:long>
+        <rdfs:label>Nuovo Mercato Esquilino</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NuovoMercatoEsquilinoDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#NuovoMercatoEsquilinoDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Enogastronomy_const"/>
+        <rdfs:comment>Da qualche anno in un ex-caserma, erede del tradizionale mercato di piazza Vittorio, è tradizionalmente il più multietnico dei mercati di Roma: i banchi offrono frutta, verdura e specialità locali ma anche dei quattro angoli del mondo. Fonte: https://www.touringclub.it/destinazioni/roma/fare/272378-mercato-esquilino</rdfs:comment>
+        <rdfs:label>Nuovo Mercato Esquilino Description</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -4738,6 +5163,7 @@ In epoca contemporanea si può parlare di un’unica Chiesa ortodossa solo in se
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PiazzaMartinoMonti">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ComplessoMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSanMartino"/>
         <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TermeTraiano"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TouringClubItalia"/>
         <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneMonti"/>
@@ -4831,6 +5257,44 @@ In epoca contemporanea si può parlare di un’unica Chiesa ortodossa solo in se
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMaggiore -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMaggiore">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ComplessoMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSotterraneaPortaMaggiore"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SepolcroMVEurisace"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMaggioreDescription"/>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10</hermes:visiting_time>
+        <context-description:address>Piazza di Porta Maggiore</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.89314587202457</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.515000027826552</location:long>
+        <rdfs:label>Porta Maggiore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMaggioreDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMaggioreDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Archeology_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Imperatore_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RomanArchitecture_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UrbanisticaRomana_const"/>
+        <rdfs:comment>In origine, la porta era la monumentalizzazione dell&apos;Acquedotto Claudio, nel punto dove questo scavalcava la &quot;via Labicana&quot; e la &quot;via Praenestina&quot;; nel 272 d.C., fu inclusa dall&apos;imperatore Aureliano nelle Mura Aureliane e utilizzata come porta, grazie alle arcate dell’acquedotto che assunsero l’aspetto di vero e proprio arco di trionfo.
+
+Di poderosa architettura in opus quadratum di travertino, il maestoso passaggio ha due fornici fiancheggiati da edicole con semicolonne corinzie, aperte da archi minori e sormontati da un imponente attico, contrastante per la superficie liscia, dove - sul fronte prospiciente piazzale Labicano - sono scolpite le iscrizioni di Claudio e dei restauratori degli acquedotti, gli imperatori Vespasiano e Tito.
+
+Sotto la porta, ancora oggi potete vedere l&apos;antica strada originale e sugli archi le iscrizioni del tempo degli imperatori Vespasiano e Tito.
+
+A ridosso dell&apos;edicola centrale, si trova il sepolcro tardo-repubblicano del fornaio Eurisace e di sua moglie Atinia, rimesso in luce nel 1838.</rdfs:comment>
+        <rdfs:label>Porta Maggiore Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMagica -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMagica">
@@ -4874,6 +5338,58 @@ Fonte: https://www.sovraintendenzaroma.it/content/porta-magica</rdfs:comment>
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProduzioneLibrariaAntica_const">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#LiteratureProduction"/>
         <rdfs:label>Produzione libraria antica</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSanMartino -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSanMartino">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Proverbs"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#BasilicaSMartinoSSilvestroMonti"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PiazzaMartinoMonti"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSanMartinoDescription"/>
+        <rdfs:label>Proverbio su San Martino</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSanMartinoDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSanMartinoDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ReligiousFestivity_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SocialExperience_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#religious_actor_const"/>
+        <rdfs:comment>La festa di san Martino è una ricorrenza celebrata l&apos;11 novembre, in diversi paesi cristiani, per commemorare Martino di Tours. Celebrazione vissuta maggiormente in ambiente rurale, in passato venivano rinnovati gli accordi in ambito agrario. Spesso questa ricorrenza è legata alla prima spillatura del vino novello. Per questo motivo è tradizione fare un bilancio del raccolto ed assaggiare il primo vino. Da questa tradizione deriva il proverbio «A San Martino ogni mosto diventa vino». Fonte: https://it.wikipedia.org/wiki/Festa_di_san_Martino</rdfs:comment>
+        <rdfs:label>Proverbio su San Martino Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSantaBibiana -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSantaBibiana">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Proverbs"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ChiesaSantaBibiana"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSantaBibianaDescription"/>
+        <rdfs:label>Proverbio su Santa Bibiana</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSantaBibianaDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ProverbioSantaBibianaDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Social_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#religious_actor_const"/>
+        <rdfs:comment>Il giorno di santa Bibiana (2 dicembre) è oggetto di un proverbio &quot;meteorologico&quot;: Si ppiove er giorno de Santa Bbibbiana, / piove [...] / quaranta ggiorni e ppoi ’na sittimana.(^ Er trenta novemmre, vv. 12-14, in Giuseppe Gioachino Belli, Sonetti romaneschi; Roma 1831. /).
+Bibiana, detta anche Viviana o Vibiana (Roma, 347-352 – Roma, 362-363), secondo la tradizione, è stata una giovane cristiana romana che subì il martirio sotto Flavio Claudio Giuliano.
+Fonte: https://it.wikipedia.org/wiki/Santa_Bibiana</rdfs:comment>
+        <rdfs:label>Proverbio su Santa Bibiana Description</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -5415,6 +5931,41 @@ https://www.vaticannews.va/it/chiesa/news/2021-03/la-basilica-di-santa-prassede-
     
 
 
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ScalinataBorgia -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ScalinataBorgia">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#LeggendaVicusSceleratus"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ScalinataBorgiaDescription"/>
+        <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
+        <hermes:accessibility_hearing_disability rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_hearing_disability>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10</hermes:visiting_time>
+        <context-description:address>Via Cavour, 256</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.89848516848264</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.49189677809598</location:long>
+        <rdfs:label>Scalinata dei Borgia/Vicus sceleratus</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ScalinataBorgiaDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ScalinataBorgiaDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#History_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#StoriesAndLegends_const"/>
+        <rdfs:comment>La Scalinata dei Borgia è una suggestiva scalinata che congiunge via Cavour con la Basilica di San Pietro in Vincoli.
+La scalinata (oggi via S.Francesco di Paola) passa sotto all’arco del palazzo dei Borgia e ricalca il percorso del romano vicus Sceleratus.
+Scendendo le scale e arrivando a piazza S. Francesco di Paola, possiamo ammirare la facciata del cosiddetto Palazzo dei Borgia, che mostra al di sopra dell’arco una serliana e sulla sinistra la parte inferiore di una torre medievale.
+La tradizione popolare chiama il balcone che sormonta l’arco “Balcone di Vanozza”, in memoria di Vanozza Cattanei, madre dei figli di papa Alessandro VI Borgia. 
+Fonte: https://www.turismoroma.it/wp-content/uploads/2013/05/08-La-ruota-della-storia.pdf</rdfs:comment>
+        <rdfs:label>Scalinata dei Borgia/Vicus sceleratus Description</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Science_const -->
 
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Science_const">
@@ -5455,7 +6006,7 @@ https://www.vaticannews.va/it/chiesa/news/2021-03/la-basilica-di-santa-prassede-
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SepolcroMVEurisace">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
         <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
-        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#PortaMaggiore"/>
         <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SepolcroMVEurisaceDescription"/>
         <hermes:visitability>Visibile dall’esterno</hermes:visitability>
         <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10</hermes:visiting_time>
@@ -5553,6 +6104,43 @@ Fonte: Sovrintendenza Roma</rdfs:comment>
     <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TecnicaArtistica_const">
         <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#ArtTechnique"/>
         <rdfs:label>Tecnica artistica</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TempioMinervaMedica -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TempioMinervaMedica">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#UnitaMonumentale"/>
+        <hermes:isCorrelatedWith rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#SantaCroceInGerusalemme"/>
+        <prov:wasAttributedTo rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Hermes_Admin"/>
+        <core:isPartOf rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RioneEsquilino"/>
+        <l0:hasDescription rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TempioMinervaMedicaDescription"/>
+        <hermes:accessibility_groups rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hermes:accessibility_groups>
+        <hermes:visitability>Il sito è accessibile solo con visita guidata con prenotazione obbligatoria www.coopculture.it.</hermes:visitability>
+        <hermes:visiting_time rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10</hermes:visiting_time>
+        <context-description:address>Via Giovanni Giolitti, 166</context-description:address>
+        <location:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">41.895183032607456</location:lat>
+        <location:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">12.511811956898189</location:long>
+        <rdfs:label>Tempio di Minerva Medica</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TempioMinervaMedicaDescription -->
+
+    <owl:NamedIndividual rdf:about="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#TempioMinervaMedicaDescription">
+        <rdf:type rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#CulturalPropertyDescription"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#Archeology_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RomanArchitecture_const"/>
+        <l0:hasTopic rdf:resource="http://www.istc.cnr.it/pstlab/ontologies/2023/1/hermes#RomanReligiousPlace_const"/>
+        <rdfs:comment>Le architetture del cosiddetto Tempio di Minerva Medica caratterizzano il paesaggio urbano a ridosso della stazione ferroviaria di Termini in via Giolitti.
+Al centro di importanti interventi di restauro e conservazione, curati dalla Soprintendenza Speciale Archeologia Belle Arti e Paesaggio di Roma, le maestose rovine costituiscono un elemento ‘iconico’ dell’Esquilino.
+Il nome deriva da un equivoco del XVI secolo, quando fu rinvenuta una statua di Minerva col serpente, erroneamente attribuita all’edificio di via Giolitti, in realtà trovata a Campo Marzio.
+L’edificio, di probabile proprietà imperiale, eretto nei primi decenni del IV secolo d.C., a pianta centrale decagonale polilobata, con cupola di 25 metri di diametro, doveva costituire un padiglione di rappresentanza eretto sul luogo degli Horti Pallantiani e Epaphroditiani nel settore orientale dell’Esquilino, occupato fin dal I secolo a.C. dagli horti dell’aristocrazia romana, non lontano dal palazzo imperiale – il Sessorium – presso la chiesa di S. Croce in Gerusalemme.
+Probabilmente fu sede di banchetti e ricevimenti anche nel periodo invernale, essendovi stato scoperto in un’ampia porzione interna il sistema di riscaldamento ad ipocausto.
+Con le sue leggere eppure altissime pareti, ampie aperture verso l’esterno, una cupola di grandezza straordinaria (è la terza per ampiezza nella Roma antica, dopo quella del Pantheon e delle Terme di Caracalla), il cosiddetto Tempio di Minerva Medica, di proprietà imperiale, rappresenta un esperimento architettonico che anticipa forme e articolazioni sviluppate poi nei secoli seguenti. Fonte: https://www.soprintendenzaspecialeroma.it/schede/tempio-di-minerva-medica-cosiddetto_3117/</rdfs:comment>
+        <rdfs:label>Tempio di Minerva Medica Description</rdfs:label>
     </owl:NamedIndividual>
     
 

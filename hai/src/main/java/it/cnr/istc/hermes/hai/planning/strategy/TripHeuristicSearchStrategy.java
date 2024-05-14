@@ -1,5 +1,6 @@
 package it.cnr.istc.hermes.hai.planning.strategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +26,13 @@ public class TripHeuristicSearchStrategy extends SearchStrategy {
 	 * 
 	 */
 	@Override
-	public void enqueue(SearchSpaceNode node) 
-	{
+	public void enqueue(SearchSpaceNode node) {
+		
+		// compute heuristic cost
+		Map<DomainComponent, Double[]> h = this.computeHeuristicCost(node);
+		// set heuristic estimation
+		node.setHeuristicCost(h);
+		
 		// get component data
 		Plan plan = node.getPlan();
 		// initialize path metric
@@ -71,38 +77,53 @@ public class TripHeuristicSearchStrategy extends SearchStrategy {
 		
 		// set duration bound
 		metric.setPathDurationBounds(pathDurationBounds);
-		System.out.println(metric);
-		// set domain specific metic
-		node.setDomainSpecificMetric(metric);
+		// set domain specific metric
+		node.setDomainSpecificMetric(metric);		
 		
-		// compute heuristic cost
-		Map<DomainComponent, Double[]> h = this.computeHeuristicCost(node);
-		// set heuristic estimation
-		node.setHeuristicCost(h);
-		// add the node to the priority queue
-		this.fringe.offer(node);
-		
-		System.out.println(">>> Fringe size: " + this.fringe.size());
+		// check computed coverage
+		if (!metric.isCyclicPath()) {
+			// add the node to the priority queue
+			this.fringe.offer(node);
+		}
 	}
 	
 	/**
 	 * 
 	 */
 	@Override
-	public int compare(SearchSpaceNode o1, SearchSpaceNode o2) 
-	{
+	public int compare(SearchSpaceNode o1, SearchSpaceNode o2) {
+		
 		// get metrics
 		PathMetric m1 = (PathMetric) o1.getDomainSpecificMetric();
 		PathMetric m2 = (PathMetric) o2.getDomainSpecificMetric();
-	
 		// maximize the coverage of the path
 		return m1.getCoverage() > m2.getCoverage() ? -1 : m1.getCoverage() < m2.getCoverage() ? 1 :
-			// maximize the number of traversed POIs
-			m1.getTraversed().size() > m2.getTraversed().size() ? -1 : m1.getTraversed().size() < m2.getTraversed().size() ? 1 :
-				// compare other metrics to move deeper in the search space
-				o1.getPlanHeuristicCost()[0] < o2.getPlanHeuristicCost()[0] ? -1 : o1.getPlanHeuristicCost()[0] > o2.getPlanHeuristicCost()[0] ? 1 : 
-					o1.getDepth() > o2.getDepth() ? -1 : o1.getDepth() < o2.getDepth() ? 1 : 0;
-			 
+					m1.getTraversed().size() > m2.getTraversed().size() ? -1 : m1.getTraversed().size() < m2.getTraversed().size() ? 1 : 
+						o1.getPlanHeuristicCost()[0] < o2.getPlanHeuristicCost()[0] ? -1 : o1.getPlanHeuristicCost()[0] > o2.getPlanHeuristicCost()[0] ? 1 :
+							o1.getDepth() > o2.getDepth() ? -1 : o1.getDepth() < o2.getDepth() ? 1 :
+			 0;
+	}
+	
+	/**
+	 * 
+	 * @param threshold
+	 */
+	public void prune(double threshold) {
+		
+		// list of nodes to remove
+		List<SearchSpaceNode> toRemove = new ArrayList<>();
+		for (SearchSpaceNode node : this.fringe) {
+			// check metric
+			PathMetric metric = (PathMetric) node.getDomainSpecificMetric();
+			if (metric.getCoverage() < threshold) {
+				toRemove.add(node);
+			}
+		}
+		
+		// remove the nodes from the fringe
+		for (SearchSpaceNode node : toRemove) {
+			this.fringe.remove(node);
+		}
 	}
 
 }

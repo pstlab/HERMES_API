@@ -1,24 +1,48 @@
 package it.cnr.istc.hermes.hai.planning;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import it.cnr.istc.hermes.hai.model.Poi;
 import it.cnr.istc.hermes.hai.model.TangibleCulturalEntity;
+import it.cnr.istc.hermes.hai.model.TripRequest;
+import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
+import it.cnr.istc.pst.platinum.ai.deliberative.PlannerBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.PlanDataBaseBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.PlanDataBase;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.Token;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.Timeline;
 
 /**
  * 
  */
-public class HaiTripPlanner {
+public class HaiPlanningEngine {
+
+    private String homePath;
 
     /**
      * 
+     * @param homePath
+     */
+    public HaiPlanningEngine(String homePath) {
+        this.homePath = homePath;
+    }
+
+    /**
+     * Create a domain specification file (DDL) and returns the file system path to the file
+     * 
      * @param pois
-     * @param tripDuration
+     * @param request
      * @return
      */
-    public synchronized String generatePlanningModel(List<Poi> pois, long tripDuration) {
+    public synchronized String generatePlanningModel(List<Poi> pois, TripRequest request) throws IOException {
 
         // get random generator
         Random rand = new Random(System.currentTimeMillis());
@@ -26,7 +50,7 @@ public class HaiTripPlanner {
         double trpDelta = rand.nextInt(1, 100);
         String ddl = "DOMAIN TRIP_PLANNING {\n\n";
         // set temporal module
-        ddl += "\tTEMPORAL_MODULE tm = [0, " + (tripDuration + Math.round(trpDelta)) + "], 1000;\n\n";
+        ddl += "\tTEMPORAL_MODULE tm = [0, " + (request.getDuration() + Math.round(trpDelta)) + "], 1000;\n\n";
 
         // list of generated path values
         List<String> pathValues = new ArrayList<>();
@@ -60,7 +84,7 @@ public class HaiTripPlanner {
 
 
             // add transition from Home
-            ddl += "Move_Home_" + s.getId() + ", ";
+            ddl += "Move_Home_" + s.getId() + "(), ";
 
 
             // generate values of pssible transitions
@@ -92,6 +116,12 @@ public class HaiTripPlanner {
             Poi t = pois.get(index);   
             ddl += "\t\t\tMove_Home_" + t.getId() + "();\n";
         }
+        ddl += "\t\t}\n\n";
+
+        // set finish value specification Finish() and related transition constraints: Finish() -> Home()
+        ddl += "\t\tVALUE Finish() [1, +INF]\n";
+        ddl += "\t\tMEETS {\n";
+        ddl += "\t\t\tHome();\n";
         ddl += "\t\t}\n\n";
 
         for (int index = 0; index < pois.size(); index++) {
@@ -169,13 +199,13 @@ public class HaiTripPlanner {
         // generate trip window SV
         ddl += "\tCOMP_TYPE SingletonStateVariable TripWindowType(None(), Visit()) {\n\n";
         ddl += "\t\tVALUE None() [1, 1]\n\t\tMEETS {\n\t\t\tVisit();\n\t\t}\n\n";
-        ddl += "\t\tVALUE Visit() [" + tripDuration + ", " + tripDuration+ "]\n\t\tMEETS {\n\t\t\tNone();\n\t\t}\n\n";
+        ddl += "\t\tVALUE Visit() [" + request.getDuration() + ", " + request.getDuration() + "]\n\t\tMEETS {\n\t\t\tNone();\n\t\t}\n\n";
         // close SV
         ddl += "\n\t}\n\n";
 
 
         // specify components
-        ddl += "\tCOMPONENT TriPlanning {FLEXIBLE decisions(functional)} : PlanningDecisionType;\n";
+        ddl += "\tCOMPONENT TripPlanning {FLEXIBLE decisions(functional)} : PlanningDecisionType;\n";
         ddl += "\tCOMPONENT TripPath {FLEXIBLE hops(primitive)} : TripPathType;\n";
         ddl += "\tCOMPONENT TripWindow {FLEXIBLE visit(uncontrollable)} : TripWindowType;\n";
         ddl += "\n\n";
@@ -185,63 +215,148 @@ public class HaiTripPlanner {
         // decompose according to possible POIs to visit
         for (String pValue : pathValues) {
 
+            // expansion with recursion
             ddl += "\t\tVALUE MakeVisitDecision() {\n\n";
             ddl += "\t\t\tcd0 <!> TripPath.hops." + pValue + ";\n";
             ddl += "\t\t\tCONTAINS [0, +INF] [0, +INF] cd0;\n";
             // set recursive call
             ddl += "\t\t\tcd1 <!> TripPlanning.decisions.MakeVisitDecision();\n";
             ddl += "\t\t\tMEETS cd1;\n";
+
+            // schedule the hop within the visit window
+            ddl += "\t\t\tcd3 <?> TripWindow.visit.Visit();\n";
+            ddl += "\t\t\tcd0 DURING [0, +INF] [0, +INF] cd3;\n\n";
+
             ddl += "\t\t}\n\n";
         }
 
         // add decomposition to stop recursion
         ddl += "\t\tVALUE MakeVisitDecision() {\n\n";
-        ddl += "\t\t\tcd0 <!> TripPath.hops.Finish();\n";
+        ddl += "\t\t\tcd0 TripPath.hops.Finish();\n";
         ddl += "\t\t\tCONTAINS [0, +INF] [0, +INF] cd0;\n";
         ddl += "\t\t}\n\n";
-        
 
         // close synch
         ddl += "\t}\n\n";
 
-        // synchronize planned visits with trip window
-        ddl += "\tSYNCHRONIZE TripPath.hops {\n\n";
-        for (String pValue : pathValues) {
-
-            ddl += "\t\tVALUE " + pValue + " {\n\n";
-            ddl += "\t\t\tcd0 <?> TripWindow.visit.Visit();\n";
-            ddl += "\t\t\tDURING [0, +INF] [0, +INF] cd0;\n\n";
-            ddl += "\t\t}\n\n";
-        }
-
-        // close sync
-        ddl += "\t}\n\n";
-
-
         // close domain specification
         ddl += "\n}\n\n";
-        return ddl;
+
+        // set the path to the file
+        String ddlPath = this.homePath + "/hermes_req_" + request.getId() + ".ddl";
+
+        // create the file
+        File file = new File(ddlPath);
+        // check if file exists
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        // write content 
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // actually writer content
+            writer.write(ddl);
+            writer.flush();
+        }
+
+        // get the path
+        return file.getAbsolutePath();
     }
 
     /**
+     * Create a problem description file (PDL) and returns the file system path to the file
      * 
-     * @param tripDuration
+     * @param request
      * @return
      */
-    public synchronized String generatePlanningProblem(long tripDuration) {
+    public synchronized String generatePlanningProblem(TripRequest request) throws IOException {
 
         // prepare problem description
         String pdl = "PROBLEM TRIP_PLANNING_PROBLEM (DOMAIN TRIP_PLANNING) {\n\n";
         
         // set facts
         pdl += "\tf0 <fact> TripPath.hops.Home() AT [0, 0] [1, 1] [1, 1];\n";
-        pdl += "\tf1 <fact> TripWindow.visit.Visit() AT [0, 0] [" + tripDuration + ", " + tripDuration + "] [" + tripDuration + ", " + tripDuration + "];\n";
+        pdl += "\tf1 <fact> TripWindow.visit.Visit() AT [0, 0] [" + request.getDuration() + ", " + request.getDuration() + "] [" + request.getDuration() + ", " + request.getDuration() + "];\n";
 
         // set goal
         pdl += "\tg0 <goal> TripPlanning.decisions.MakeVisitDecision() AT [0, +INF] [0, +INF] [0, +INF];\n";
 
         // close problem specification
         pdl += "\n}\n";
-        return pdl;
+
+        // prepare PDL file path
+        String pdlPath = homePath + "/hermes_req_" + request.getId() + ".pdl";
+
+        // create the file
+        File file = new File(pdlPath);
+        // check if file exists
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        
+        // write content 
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // actually writer content
+            writer.write(pdl);
+            writer.flush();
+        }
+        // get the path
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * Instantiate and run a planning instance over the generated problem description. 
+     * 
+     * The method returns an oredered list of Poi IDs representing the path planned after user request.
+     * @param ddl
+     * @param pdl
+     * @return
+     */
+    public List<String> plan(String ddl, String pdl) {
+
+        // list of computed POI IDs composing the generated plan
+        List<String> path = new ArrayList<>();
+
+        try {
+
+            // build the plan database
+            PlanDataBase pdb = PlanDataBaseBuilder.createAndSet(ddl, pdl);
+
+            // set a planning instance of the plan database
+            Planner planner = PlannerBuilder.createAndSet(TripPlanner.class, pdb);
+
+            // start planning
+            SolutionPlan plan = planner.plan();
+            // get timelines
+            List<Timeline> tls = plan.getTimelines();
+            // check timelines
+            for (Timeline tl : tls) {
+
+                // check component name
+                if (tl.getComponent().getName().equalsIgnoreCase("TripPath")) {
+
+                    // get the planned Pois
+                    for (Token token : tl.getTokens()) {
+                        // check token 
+                        if (token.getPredicate().getGroundSignature().contains("Visit_POI")) {
+                            // get Poi ID
+                            String poiId = token.getPredicate().getGroundSignature().replace("Visit_", "");
+                            // add ID to the result list
+                            path.add(poiId);                            
+                        }
+                    }
+                    
+                }
+            }
+            
+        } catch (NoSolutionFoundException ex) {
+            System.out.println("[HermesPlanner] No solution found - " + ex.getMessage());
+
+        } catch (Exception ex) {
+            System.out.println("[HermesPlanner] Error while calling the planner - " + ex.getMessage());
+        }
+
+        // get the computed path
+        return path;
     }
 }

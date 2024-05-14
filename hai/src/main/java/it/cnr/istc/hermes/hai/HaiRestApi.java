@@ -1,5 +1,6 @@
 package it.cnr.istc.hermes.hai;
 
+import java.io.IOException;
 import java.util.*;
 
 import javax.validation.Valid;
@@ -29,7 +30,7 @@ import it.cnr.istc.hermes.hai.knowledge.HermesDictionary;
 import it.cnr.istc.hermes.hai.knowledge.KnowledgeQuery;
 import it.cnr.istc.hermes.hai.model.*;
 import it.cnr.istc.hermes.hai.model.ex.CulturalEntityExtractionException;
-import it.cnr.istc.hermes.hai.planning.HaiTripPlanner;
+import it.cnr.istc.hermes.hai.planning.HaiPlanningEngine;
 
 /**
  * Hermes AI-based Component - REST API
@@ -41,6 +42,9 @@ public class HaiRestApi implements ErrorController {
 
 	@Value("${knowledge.model.path}")
 	private String model;
+
+	@Value("${planner.platinum.home}")
+	private String platinumHome;						// home folder of the planning engine
 
 	@Autowired
 	private TripRequestRepository reqRepo;				// mongoDB repo for received requests
@@ -56,7 +60,7 @@ public class HaiRestApi implements ErrorController {
 
 	private static HaiKnowledgeGraph knowledge; 		// knowledge graph with embedded reasoner
 
-	private static HaiTripPlanner planner;				// planning module to generate trips
+	private static HaiPlanningEngine planner;				// planning module to generate trips
 
 	/*
 	 * 
@@ -286,7 +290,6 @@ public class HaiRestApi implements ErrorController {
 			this.setupKnowledge();
 		}
 
-		Set<Poi> pois = new HashSet<>();
 		// save the received request
 		this.reqRepo.save(request);	
 
@@ -310,6 +313,10 @@ public class HaiRestApi implements ErrorController {
 			}
 		}
 
+		// maxium duration of the visit according to the retrieved POIs
+		long maxVisitTime = 0;
+		// create a poi index
+		Map<String, Poi> index = new HashMap<>();
 		// prepare POIs for each tangible cultural entity
 		for (CulturalEntity tangible : tangibles) {
 
@@ -317,6 +324,7 @@ public class HaiRestApi implements ErrorController {
 			List<Description> descs = knowledge.getEntityDescriptions(tangible);
 			// consider only entities with at least one description associated
 			if (!descs.isEmpty()) {
+
 				// create contextual POI
 				Poi poi = new Poi();
 				poi.setTangible(tangible);
@@ -325,46 +333,78 @@ public class HaiRestApi implements ErrorController {
 
 				// store the poi into the repository
 				this.poiRepo.save(poi);
-				// add poi to the set
-				pois.add(poi);
+				// index poi
+				index.put(poi.getId(), poi);
+				// increment max duration
+				maxVisitTime += ((TangibleCulturalEntity) tangible).getVisitingTime();
 			}
 		}
 
-	
-		PlannedTrip trip = null;
+
+		System.out.println("A number of " + index.size() + " relevant tangible entities have been found ... max visiting time " + maxVisitTime);
+
+
+		// initialize an empty trip
+		PlannedTrip trip = new PlannedTrip();
+		trip.setCounter(0);
+		trip.setDuration(request.getDuration());
+		trip.setHops(new ArrayList<>());
+		trip.setRanking(0);
+		trip.setRequest(request);
+
 		// check found POIs
-		if (!pois.isEmpty()) {
+		if (!index.isEmpty()) {
 
-			// create planning engine
-			if (planner == null) {
-				// create trip planner instance
-				planner = new HaiTripPlanner();
+
+			// check if planning is necessary 
+			if (maxVisitTime > request.getDuration()) {
+
+				System.out.println("Start the planning process to optimize the visit path...");
+				// create planning engine
+				if (planner == null) {
+					// create trip planner instance
+					planner = new HaiPlanningEngine(this.platinumHome);
+				}
+
+				try {
+					
+					// generate planning specification from POIs
+					String ddlPath = planner.generatePlanningModel(new ArrayList<>(index.values()), request);
+					// generate planning problem from request duration
+					String pdlPath = planner.generatePlanningProblem(request);
+				
+					// run the planner
+					List<String> poiIds = planner.plan(ddlPath, pdlPath);
+					System.out.println("Generated trip visit path: " + poiIds);
+					List<Poi> path = new ArrayList<>();
+					// prepare the path as ordered list of POIs
+					for (String id : poiIds) {
+						// get the indexed POI
+						Poi poi = index.get(id);
+						// add the Poi to the path
+						path.add(poi);
+					}
+				
+					// set the computed trip path
+					trip.setHops(path);
+					// save planned trip
+					this.tripRepo.save(trip);
+
+				} catch (IOException ex) {
+					System.err.println("Error creating DDL/PDL files: " + ex.getMessage() + "\n");
+				}	
+
+			} else {
+
+				System.out.println("No need for planning... build the path from retrieved POIs directly");
+				List<Poi> path = new ArrayList<>();
+				for (Poi poi : index.values()) {
+					path.add(poi);
+				}
+
+				// set hops to the trip
+				trip.setHops(path);
 			}
-
-			// generate planning specification from POIs
-			String ddl = planner.generatePlanningModel(new ArrayList<>(pois), request.getDuration());
-			System.out.println("\n" + ddl + "\n");
-
-
-			// generate planning problem from request duration
-			String pdl = planner.generatePlanningProblem(request.getDuration());
-			System.out.println("\n" + pdl + "\n");
-			
-			
-			/*
-			 * TODO -- IMPLEMENT PLANNING PROCESS
-			 */
-		
-			// create trip
-			trip = new PlannedTrip();
-			trip.setCounter(0);
-			trip.setDuration(request.getDuration());
-			trip.setHops(new ArrayList<>(pois));
-			trip.setRanking(0);
-			trip.setRequest(request);
-
-			// save planned trip
-			this.tripRepo.save(trip);
 		}
 
 		// get the list

@@ -1,0 +1,7 @@
+PROBLEM TRIP_PLANNING_PROBLEM (DOMAIN TRIP_PLANNING) {
+
+	f0 <fact> TripPath.hops.Home() AT [0, 0] [1, 1] [1, 1];
+	f1 <fact> TripWindow.visit.Visit() AT [0, 0] [240, 240] [240, 240];
+	g0 <goal> TripPlanning.decisions.MakeVisitDecision() AT [0, +INF] [0, +INF] [0, +INF];
+
+}

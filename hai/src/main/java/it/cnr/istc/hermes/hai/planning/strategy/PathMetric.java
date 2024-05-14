@@ -12,27 +12,48 @@ import it.cnr.istc.pst.platinum.ai.framework.domain.component.pdb.DecisionVariab
  */
 public class PathMetric {
 
-    private Set<DecisionVariable> traversed;
+    private Set<String> traversed;
     private Map<String, Integer> poi2count;
     private String pathDesc;
     private long[] pathDurationBounds;
     private long[] tripDurationBounds;
+    private boolean cyclicPath;
 
     /**
      * 
      */
-    public PathMetric() {
+    protected PathMetric() {
         this.traversed = new HashSet<>();
         this.poi2count = new HashMap<>();
         this.pathDesc = "";
+        this.cyclicPath = false;
     }
     
-    public void addTraversed(DecisionVariable var) {
-        this.traversed.add(var);
-        this.pathDesc += "-> " + var.getValue() + " ";
+    protected void addTraversed(DecisionVariable var) {
+        
+        // check cyclic flag 
+        if (!cyclicPath) {
+            // set cyclic flag 
+            this.cyclicPath = this.traversed.contains(var.getValue());
+        }
+        
+        // check description
+        if (!var.getValue().contains("Home") && 
+                !var.getValue().contains("Move") &&
+                !var.getValue().contains("Finish")) {
+            
+            // add traversed
+            this.traversed.add(var.getValue());
+            // update description
+            this.pathDesc += "-> " + var.getValue() + " ";
+        }
     }
     
-    public void updatePoiCounter(DecisionVariable var) {
+    public boolean isCyclicPath() {
+        return cyclicPath;
+    }
+    
+    protected void updatePoiCounter(DecisionVariable var) {
         
         if (!this.poi2count.containsKey(var.getValue())) {
             this.poi2count.put(var.getValue(), 0);
@@ -42,11 +63,7 @@ public class PathMetric {
         this.poi2count.put(var.getValue(), this.poi2count.get(var.getValue() + 1));
     }
     
-    /**
-     * 
-     * @return
-     */
-    public boolean hasCycle() {
+    protected boolean hasCycle() {
         // set cycle flag
         boolean cycle = false;
         for (String poi : this.poi2count.keySet()) {
@@ -62,33 +79,32 @@ public class PathMetric {
         return cycle;
     }
     
-    public long[] getPathDurationBounds() {
+    protected long[] getPathDurationBounds() {
         return pathDurationBounds;
     }
     
-    public void setPathDurationBounds(long[] pathDurationBounds) {
+    protected void setPathDurationBounds(long[] pathDurationBounds) {
         this.pathDurationBounds = pathDurationBounds;
     }
     
-    public Map<String, Integer> getPoi2count() {
+    protected Map<String, Integer> getPoi2count() {
         return new HashMap<>(poi2count);
     }
     
-    public Set<DecisionVariable> getTraversed() {
+    protected Set<String> getTraversed() {
         return new HashSet<>(traversed);
     }
     
-    public long[] getTripDurationBounds() {
+    protected long[] getTripDurationBounds() {
         return tripDurationBounds;
     }
     
-    public void setTripDurationBounds(long[] tripDurationBounds) {
+    protected void setTripDurationBounds(long[] tripDurationBounds) {
         this.tripDurationBounds = tripDurationBounds;
     }
     
     /**
      * Coverage as the percentage of visit time still available for planning
-     * 
      * @return
      */
     public double getCoverage() {
@@ -120,12 +136,13 @@ public class PathMetric {
      */
     @Override
     public String toString() {
-        // JSON-style description
+        // TODO Auto-generated method stub
         return "{\n"
                 + "\t\"visit_duration\": [" + tripDurationBounds[0] + " , " + tripDurationBounds[1] + "],\n"
                 + "\t\"path_duration\": [" + pathDurationBounds[0] + ", " + pathDurationBounds[1] + "],\n"
                 + "\t\"available_time\": " + this.getAvailableTime() + ",\n"
                 + "\t\"coverage\": " + this.getCoverage() + ",\n"
+                + "\t\"traversed\": " + this.traversed.size() + ",\n"
                 + "\t\"path\": " + pathDesc + "\n"
             + "}";
     }
