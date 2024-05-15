@@ -4,6 +4,7 @@ import it.cnr.istc.hermes.hai.planning.solver.HermesSolver;
 import it.cnr.istc.hermes.hai.planning.strategy.TripHeuristicSearchStrategy;
 import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
 import it.cnr.istc.pst.platinum.ai.deliberative.heuristic.HierarchicalFlawSelectionHeuristic;
+import it.cnr.istc.pst.platinum.ai.deliberative.heuristic.RandomFlawSelectionHeuristic;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.FrameworkLoggerConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.FlawSelectionHeuristicsConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.PlannerSolverConfiguration;
@@ -23,7 +24,7 @@ import it.cnr.istc.pst.platinum.ai.framework.utils.log.FrameworkLoggingLevel;
     timeout = 180000
 )
 @FlawSelectionHeuristicsConfiguration(
-    heuristics = HierarchicalFlawSelectionHeuristic.class
+    heuristics = RandomFlawSelectionHeuristic.class
 )
 @SearchStrategyConfiguration(
     strategy = TripHeuristicSearchStrategy.class

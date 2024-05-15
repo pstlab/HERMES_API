@@ -96,12 +96,11 @@ public class TripHeuristicSearchStrategy extends SearchStrategy {
 		// get metrics
 		PathMetric m1 = (PathMetric) o1.getDomainSpecificMetric();
 		PathMetric m2 = (PathMetric) o2.getDomainSpecificMetric();
-		// maximize the coverage of the path
-		return m1.getCoverage() > m2.getCoverage() ? -1 : m1.getCoverage() < m2.getCoverage() ? 1 :
-					m1.getTraversed().size() > m2.getTraversed().size() ? -1 : m1.getTraversed().size() < m2.getTraversed().size() ? 1 : 
-						o1.getPlanHeuristicCost()[0] < o2.getPlanHeuristicCost()[0] ? -1 : o1.getPlanHeuristicCost()[0] > o2.getPlanHeuristicCost()[0] ? 1 :
-							o1.getDepth() > o2.getDepth() ? -1 : o1.getDepth() < o2.getDepth() ? 1 :
-			 0;
+		// Pareto-based search
+		return  m1.getCoverage() > m2.getCoverage() && m1.getTraversed().size() < m2.getTraversed().size() ? -1 :
+			m1.getCoverage() < m2.getCoverage() && m1.getTraversed().size() > m2.getTraversed().size() ? 1 : 
+				o1.getPlanHeuristicCost()[0] < o2.getPlanHeuristicCost()[0] ? -1 : o1.getPlanHeuristicCost()[0] > o2.getPlanHeuristicCost()[0] ? 1 :
+					0;
 	}
 	
 	/**

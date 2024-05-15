@@ -22,7 +22,8 @@ import it.cnr.istc.pst.platinum.ai.framework.microkernel.resolver.ex.UnsolvableF
  */
 public class HermesSolver extends Solver {
 		
-	private static final double QUALITY_THRESHOLD = .5;
+	// set minimum plan quality
+	private static final double QUALITY_THRESHOLD = .7;
 	
 	/**
 	 * 
@@ -123,13 +124,13 @@ public class HermesSolver extends Solver {
 				info("Metric for the current node:\n" + metric + "\n" + timeline + "\n");
 				
 				try {
-					
-					
-					// check if the quality is above the desired threshold
+										
+					/* check if the quality is above the desired threshold
 					if (metric.getCoverage()  >= QUALITY_THRESHOLD) {
 						// prune the search space
 						((TripHeuristicSearchStrategy) this.fringe).prune(metric.getCoverage());
 					}
+					*/
 					
 					// choose the best flaws to solve
 					List<Flaw> flaws = new ArrayList<>(this.heuristic.choose());
