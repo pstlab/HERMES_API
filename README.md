@@ -50,8 +50,10 @@ To run the service locally, you will need:
 
 - Java 17 or newer, which is the baseline for Spring Boot 3.x
 - A reachable MongoDB instance
+  - Check the file ```application.properties``` and here replace the variables with a valid MONGODB USER, PASSWORD, and CLOUD
 - Access to the HERMES RDF knowledge model file
 - A PLATINUm installation or resource directory matching `planner.platinum.home`
+  - Check your Maven local settings (```~/.m2/settings.xml```) to add your GitHub token and be able to download the platinum package (check the pom dependency to the GitHub repository)
 
 The default application configuration expects:
 
