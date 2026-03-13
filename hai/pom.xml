@@ -84,4 +84,11 @@
 		</plugins>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>github-pstlab</id>
+			<url>https://maven.pkg.github.com/pstlab/PLATINUm</url>
+		</repository>
+	</repositories>
+
 </project>
