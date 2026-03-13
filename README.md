@@ -1,15 +1,15 @@
-# HERMES REST API
+# HERMES API
 
 HERMES REST API is a Spring Boot service that exposes the server-side capabilities of the HERMES AI component. The project combines a knowledge graph layer, a MongoDB persistence layer, and a planning engine based on PLATINUm to retrieve cultural knowledge, create new cultural entities, and synthesize personalized trips. The repository currently contains a placeholder README in the root, while the actual Java application lives under the `hai/` module. 
 
 ## About the repository
 
-The repository is described on GitHub as **"HERMES AI Server Component"**. The codebase is written in Java, and the main Maven module is `hai`, a Spring Boot application that depends on Spring Web, Spring Data MongoDB, Apache Jena, and PLATINUm. The application entry point is `HaiRestApi`, which also declares the REST endpoints documented below.
+The repository is described on GitHub as **"HERMES AI Server Component"**. The codebase is written in Java, and the main Maven module is `hai`, a Spring Boot application that depends on Spring Web, Spring Data MongoDB, Apache Jena, and PLATINUm. The application entry point is `HaiRestApi`, which also declares the API endpoints documented below.
 
 ## Repository structure
 
 ```text
-HERMES_REST_API/
+HERMES_API/
 ├── README.md                # currently a placeholder in the repository root
 ├── hai/                     # main Spring Boot application module
 │   ├── pom.xml
@@ -28,7 +28,7 @@ This layout is based on the public repository tree, which shows the root placeho
 
 ## Features
 
-- REST endpoints for browsing HERMES knowledge topics and cultural entities. 
+- API endpoints for browsing HERMES knowledge topics and cultural entities. 
 - Planning endpoint for generating personalized trips from selected topics and a requested duration.
 - Endpoint for posting a new cultural entity and attaching a topic-tagged textual description to the knowledge graph.
 - MongoDB-backed storage for incoming trip requests, generated POIs, planned trips, and posted entity requests. 
@@ -65,8 +65,8 @@ The default application configuration expects:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/pstlab/HERMES_REST_API.git
-cd HERMES_REST_API/hai
+git clone https://github.com/pstlab/HERMES_API.git
+cd HERMES_API/hai
 ```
 
 ### 2. Configure the environment
@@ -109,7 +109,7 @@ The main class is `it.cnr.istc.hermes.hai.HaiRestApi`.
 
 ## API overview
 
-The application exposes REST endpoints directly from `HaiRestApi`. The home endpoint is `/`, and the controller also registers a generic `/error` handler. Several knowledge endpoints are declared as `GET` methods but still accept a JSON request body containing a `uri` field. That is unusual for many HTTP clients, so in practice you may prefer to test them with tools such as cURL or Postman that allow bodies on `GET` requests.
+The application exposes API endpoints directly from `HaiRestApi`. The home endpoint is `/`, and the controller also registers a generic `/error` handler. Several knowledge endpoints are declared as `GET` methods, but still accept a JSON request body containing a `uri` field. That is unusual for many HTTP clients, so in practice, you may prefer to test them with tools such as cURL or Postman that allow bodies on `GET` requests.
 
 ### Base endpoint
 
